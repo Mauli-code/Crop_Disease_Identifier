@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crop-disease-identifier"
+version = "1.0.0"
+description = "100% offline crop disease detection PWA with TensorFlow.js"
+requires-python = ">=3.11,<3.12"
+authors = [
+    {name = "Manoj Ahire", email = "manojahire7703@gmail.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+dependencies = [
+    "fastapi==0.104.1",
+    "uvicorn==0.24.0",
+    "tensorflow-cpu==2.15.0",
+    "Pillow==10.1.0",
+    "python-multipart==0.0.6",
+    "numpy==1.24.3",
+    "tensorflowjs==4.13.0",
+]
+
+[project.urls]
+Repository = "https://github.com/ManojAhire/crop-disease-identifier"
