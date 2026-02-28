@@ -1,0 +1,576 @@
+{
+  "classes": [
+    "Apple___Apple_scab",
+    "Apple___Black_rot",
+    "Apple___Cedar_apple_rust",
+    "Apple___healthy",
+    "Blueberry___healthy",
+    "Cherry_(including_sour)___Powdery_mildew",
+    "Cherry_(including_sour)___healthy",
+    "Corn_(maize)___Cercospora_leaf_spot_Gray_leaf_spot",
+    "Corn_(maize)___Common_rust",
+    "Corn_(maize)___Northern_Leaf_Blight",
+    "Corn_(maize)___healthy",
+    "Grape___Black_rot",
+    "Grape___Esca_(Black_Measles)",
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+    "Grape___healthy",
+    "Orange___Haunglongbing_(Citrus_greening)",
+    "Peach___Bacterial_spot",
+    "Peach___healthy",
+    "Pepper_bell___Bacterial_spot",
+    "Pepper_bell___healthy",
+    "Potato___Early_blight",
+    "Potato___Late_blight",
+    "Potato___healthy",
+    "Raspberry___healthy",
+    "Soybean___healthy",
+    "Squash___Powdery_mildew",
+    "Strawberry___Leaf_scorch",
+    "Strawberry___healthy",
+    "Tomato___Bacterial_spot",
+    "Tomato___Early_blight",
+    "Tomato___Late_blight",
+    "Tomato___Leaf_Mold",
+    "Tomato___Septoria_leaf_spot",
+    "Tomato___Spider_mites_Two-spotted_spider_mite",
+    "Tomato___Target_Spot",
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+    "Tomato___Tomato_mosaic_virus",
+    "Tomato___healthy"
+  ],
+  "diseases": {
+    "Apple___Apple_scab": {
+      "crop": "Apple",
+      "disease": "Apple Scab",
+      "scientific_name": "Venturia inaequalis",
+      "is_healthy": false,
+      "symptoms": "Dark, olive-green to black velvety spots on leaves and fruit. Leaves may yellow and drop prematurely. Fruit develops raised, corky, dark scab-like lesions that crack and deform the surface.",
+      "treatment": {
+        "organic": "Apply wettable sulfur or lime-sulfur spray during early spring when first green leaf tips appear. Use neem oil as a protectant. Remove and destroy fallen leaves in autumn to reduce overwintering fungal spores. Apply 5% urea spray to fallen leaves to accelerate decomposition.",
+        "chemical": "Apply Captan, Myclobutanil (Immunox), or Mancozeb on a 7-10 day schedule from green tip through petal fall. Chlorothalonil (Daconil) is also effective as a protectant spray. Always apply BEFORE wet periods for best results."
+      },
+      "prevention": "Plant scab-resistant apple varieties (e.g., Liberty, Enterprise, Freedom). Ensure proper tree spacing and pruning for good air circulation. Remove and destroy fallen leaves each autumn. Avoid overhead irrigation. Apply preventive fungicide sprays starting at green tip stage.",
+      "fertilizer": "Apply balanced NPK fertilizer (10-10-10) in early spring. Supplement with calcium to strengthen cell walls and reduce disease susceptibility. Avoid excess nitrogen which promotes soft, disease-prone growth.",
+      "risk_level": "High"
+    },
+    "Apple___Black_rot": {
+      "crop": "Apple",
+      "disease": "Black Rot",
+      "scientific_name": "Botryosphaeria obtusa",
+      "is_healthy": false,
+      "symptoms": "Purple or reddish-brown spots on leaves that enlarge with concentric rings (frog-eye pattern). Fruit develops firm, brown-to-black rot starting from the calyx end with alternating black and brown concentric rings. Cankers form on branches.",
+      "treatment": {
+        "organic": "Prune out all dead wood, cankers, and mummified fruit during dormant season. Apply copper-based fungicide sprays. Remove and destroy infected fruit immediately. Maintain good tree hygiene by removing all debris from the orchard floor.",
+        "chemical": "Apply Captan or Thiophanate-methyl (Topsin-M) starting at pink bud stage. Follow with Myclobutanil or Mancozeb through the growing season at 10-14 day intervals. Strobilurin fungicides are also effective when alternated with other classes."
+      },
+      "prevention": "Remove all mummified fruit from trees and ground. Prune dead branches and cankers 6-8 inches below visible damage. Maintain proper tree nutrition and vigor. Ensure good air drainage within the canopy. Do not leave pruning wounds untreated in wet weather.",
+      "fertilizer": "Apply balanced fertilizer in early spring. Potassium-rich fertilizers help improve disease resistance. Avoid late-season nitrogen applications that promote succulent growth.",
+      "risk_level": "High"
+    },
+    "Apple___Cedar_apple_rust": {
+      "crop": "Apple",
+      "disease": "Cedar Apple Rust",
+      "scientific_name": "Gymnosporangium juniperi-virginianae",
+      "is_healthy": false,
+      "symptoms": "Bright orange-yellow spots appear on upper leaf surfaces in late spring. Spots enlarge and develop small black dots (spermogonia). Tubular projections (aecia) form on leaf undersides. Fruit may develop orange lesions near the calyx.",
+      "treatment": {
+        "organic": "Remove nearby cedar/juniper trees (alternate host) within a 2-mile radius if feasible. Apply sulfur-based fungicides beginning at pink bud stage. Use Bacillus subtilis-based biofungicides as a preventative treatment.",
+        "chemical": "Apply Myclobutanil (Immunox), Propiconazole, or Triadimefon from pink bud stage through 3-4 weeks after petal fall. Mancozeb is effective as a protectant but not post-infection. Rotate fungicide classes to prevent resistance."
+      },
+      "prevention": "Plant rust-resistant apple varieties (e.g., Liberty, Freedom, Redfree). Remove eastern red cedar and juniper trees within proximity. Apply preventive fungicide sprays during spring infection period. Maintain tree health through proper nutrition.",
+      "fertilizer": "Use a balanced fertilizer program. Ensure adequate phosphorus and potassium for immune function. Foliar micronutrient sprays (zinc, boron) can support tree health.",
+      "risk_level": "Medium"
+    },
+    "Apple___healthy": {
+      "crop": "Apple",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves appear uniformly green with no spots, lesions, or discoloration.",
+      "treatment": {
+        "organic": "No treatment needed. Continue regular maintenance including dormant oil sprays and cultural practices.",
+        "chemical": "No chemical treatment required. Maintain a preventive spray schedule as part of integrated pest management."
+      },
+      "prevention": "Maintain balanced nutrition with annual soil tests. Prune for good air circulation. Practice orchard sanitation by removing dropped fruit and leaves. Apply dormant sprays during winter. Monitor regularly for early signs of disease.",
+      "fertilizer": "Apply balanced NPK fertilizer (10-10-10) in early spring at a rate of 1 lb per inch of trunk diameter. Supplement with calcium and boron based on soil test results.",
+      "risk_level": "Low"
+    },
+    "Blueberry___healthy": {
+      "crop": "Blueberry",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves appear uniformly deep green, smooth, and intact.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain mulch cover and acidic soil conditions.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Maintain soil pH between 4.5-5.5 for optimal health. Apply acidifying mulch (pine bark, sawdust). Ensure adequate drainage. Prune old canes to encourage new productive growth. Protect from birds with netting during fruit-set.",
+      "fertilizer": "Apply ammonium sulfate or specialty acid-loving plant fertilizer in early spring. Avoid nitrate-based fertilizers. Supplement with iron sulfate if leaves show chlorosis.",
+      "risk_level": "Low"
+    },
+    "Cherry_(including_sour)___Powdery_mildew": {
+      "crop": "Cherry",
+      "disease": "Powdery Mildew",
+      "scientific_name": "Podosphaera clandestina",
+      "is_healthy": false,
+      "symptoms": "White, powdery fungal growth on leaf surfaces, young shoots, and fruit. Leaves may curl, become distorted, and turn yellow. Severely infected fruit develops cracked, rough surface with white coating. Young leaves are most susceptible.",
+      "treatment": {
+        "organic": "Apply sulfur-based fungicides or potassium bicarbonate sprays at first sign of infection. Neem oil provides moderate control. Baking soda solution (1 tbsp per gallon water with dish soap) can suppress early infections. Prune to improve air circulation.",
+        "chemical": "Apply Myclobutanil, Propiconazole, or Trifloxystrobin at first sign of white growth. Alternate fungicide classes to prevent resistance. Apply every 7-14 days during active infection. Rally (Myclobutanil) is particularly effective."
+      },
+      "prevention": "Select mildew-resistant cherry varieties when available. Ensure proper tree spacing for air circulation. Avoid excess nitrogen fertilization. Prune interior branches to allow light penetration. Begin preventive sprays when conditions favor disease (warm, dry days and cool nights).",
+      "fertilizer": "Apply balanced fertilizer avoiding excess nitrogen. Potassium sulfate applications improve disease resistance. Apply calcium to strengthen cell walls.",
+      "risk_level": "Medium"
+    },
+    "Cherry_(including_sour)___healthy": {
+      "crop": "Cherry",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are dark green, smooth, and well-formed.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain cultural practices.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Maintain proper tree nutrition. Prune annually for shape and air circulation. Practice sanitation by removing dropped fruit. Monitor for pest activity. Apply dormant copper sprays in late winter.",
+      "fertilizer": "Apply balanced NPK fertilizer in early spring. Cherry trees benefit from calcium and potassium supplementation based on soil testing results.",
+      "risk_level": "Low"
+    },
+    "Corn_(maize)___Cercospora_leaf_spot_Gray_leaf_spot": {
+      "crop": "Corn (Maize)",
+      "disease": "Gray Leaf Spot",
+      "scientific_name": "Cercospora zeae-maydis",
+      "is_healthy": false,
+      "symptoms": "Rectangular, tan-to-gray lesions that run parallel to leaf veins. Lesions are sharply defined with parallel edges. In severe cases, lesions merge causing extensive leaf blight. Lower leaves are affected first, progressing upward.",
+      "treatment": {
+        "organic": "Crop rotation with non-host crops (soybeans, wheat). Tillage to bury infected crop residue. Remove heavily infected plants. Apply Bacillus-based biofungicides as a supplemental control measure.",
+        "chemical": "Apply strobilurin fungicides (Azoxystrobin/Quadris, Pyraclostrobin/Headline) at VT-R1 (tasseling to silking). Triazole fungicides (Propiconazole) also effective. Apply before disease exceeds 5% severity on the 3rd leaf below the ear."
+      },
+      "prevention": "Plant resistant corn hybrids (check seed company gray leaf spot ratings). Practice 1-2 year rotation away from corn. Till under infected residue. Avoid continuous corn production. Choose hybrids with upright leaf architecture for better air circulation.",
+      "fertilizer": "Apply nitrogen according to yield goals (typically 1.1 lb N per bushel of expected yield). Ensure adequate potassium as deficiency increases susceptibility. Side-dress nitrogen at V6-V8 stage.",
+      "risk_level": "High"
+    },
+    "Corn_(maize)___Common_rust": {
+      "crop": "Corn (Maize)",
+      "disease": "Common Rust",
+      "scientific_name": "Puccinia sorghi",
+      "is_healthy": false,
+      "symptoms": "Small, circular to elongated cinnamon-brown powdery pustules (uredinia) on both leaf surfaces. Pustules erupt through the epidermis and release reddish-brown spores. In severe infection, leaves may turn yellow and die prematurely.",
+      "treatment": {
+        "organic": "Plant resistant hybrids as the primary control. Crop rotation has limited effect as spores are windborne. Remove severely infected plants. Maintain plant vigor through proper nutrition.",
+        "chemical": "Apply strobilurin or triazole fungicides (Azoxystrobin, Propiconazole) before R1 if rust appears early and conditions favor spread (cool temperatures 60-77°F, high humidity). Spraying after R3 provides minimal benefit."
+      },
+      "prevention": "Plant rust-resistant hybrids (this is the most effective control). Early planting helps avoid peak rust spore arrival. Monitor fields regularly from tasseling onward. Economic threshold for fungicide is when 50% of plants have rust below the ear leaf before tasseling.",
+      "fertilizer": "Apply recommended rates of nitrogen, phosphorus, and potassium based on soil test. Avoid nitrogen deficiency which can increase severity of rust infections. Zinc supplementation may help in deficient soils.",
+      "risk_level": "Medium"
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+      "crop": "Corn (Maize)",
+      "disease": "Northern Leaf Blight",
+      "scientific_name": "Exserohilum turcicum",
+      "is_healthy": false,
+      "symptoms": "Long (1-6 inch), elliptical, grayish-green to tan cigar-shaped lesions on leaves. Lesions first appear on lower leaves and progress upward. Under humid conditions, dark gray-green spores form on lesion surfaces. Severe infection causes extensive blighting.",
+      "treatment": {
+        "organic": "Crop rotation with non-host crops for at least 1 year. Till under corn residue to reduce inoculum. Plant resistant hybrids with Ht genes for resistance. Apply Bacillus-based biofungicides.",
+        "chemical": "Apply Headline (Pyraclostrobin), Quilt Xcel (Azoxystrobin + Propiconazole), or Trivapro at VT-R1 stage. Fungicides are most effective when applied before disease reaches the ear leaf. Economic threshold is roughly when disease is on the 3rd leaf below the ear at tasseling."
+      },
+      "prevention": "Plant resistant hybrids with Ht1, Ht2, Ht3, or HtN resistance genes. Rotate away from corn for 1-2 years. Manage crop residue through tillage. Avoid planting susceptible hybrids in fields with a history of NLB. Monitor regularly from V12 onward.",
+      "fertilizer": "Balanced nitrogen program at recommended rates. Adequate potassium levels are critical as K-deficient corn is more susceptible. Apply starter fertilizer to promote early vigor.",
+      "risk_level": "High"
+    },
+    "Corn_(maize)___healthy": {
+      "crop": "Corn (Maize)",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are uniformly green with no spots, lesions, or discoloration.",
+      "treatment": {
+        "organic": "No treatment needed. Continue good cultural practices.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Maintain balanced fertility. Practice crop rotation. Scout fields regularly for early disease detection. Use resistant hybrid varieties. Manage residue appropriately.",
+      "fertilizer": "Apply nitrogen based on yield goal (typically 150-200 lbs/acre for high-yield corn). Phosphorus and potassium per soil test. Side-dress nitrogen at V6-V8. Consider sulfur and zinc based on soil pH and test.",
+      "risk_level": "Low"
+    },
+    "Grape___Black_rot": {
+      "crop": "Grape",
+      "disease": "Black Rot",
+      "scientific_name": "Guignardia bidwellii",
+      "is_healthy": false,
+      "symptoms": "Reddish-brown circular leaf spots with dark margins. Tiny black fruiting bodies (pycnidia) visible in leaf spots. Fruit develops light brown soft rot that quickly turns black and shrivels into hard, black mummies. Tendrils and shoots develop dark elongated lesions.",
+      "treatment": {
+        "organic": "Remove all mummified berries from vines and ground in late winter. Apply copper hydroxide (Champion) or potassium bicarbonate (MilStop) sprays from pre-bloom through 4 weeks after bloom. Bacillus subtilis (Serenade) provides moderate control.",
+        "chemical": "Apply Mancozeb from pre-bloom through 4 weeks post-bloom at 7-10 day intervals. Myclobutanil (Rally/Nova) or Tebuconazole provide excellent control with some curative activity if applied within 72 hours of infection. Strobilurin fungicides (Abound) are also effective."
+      },
+      "prevention": "Remove all mummified fruit and infected canes during dormant pruning. Apply fresh mulch in spring to bury ground mummies. Ensure good vine canopy management for air circulation and sunlight penetration. Avoid overcrowding. Begin fungicide program at pre-bloom and maintain through 4 weeks after bloom.",
+      "fertilizer": "Apply balanced vineyard fertilizer based on tissue and soil analysis. Adequate potassium improves berry quality and disease tolerance. Avoid excess nitrogen which promotes dense, disease-susceptible canopy growth.",
+      "risk_level": "Critical"
+    },
+    "Grape___Esca_(Black_Measles)": {
+      "crop": "Grape",
+      "disease": "Esca (Black Measles)",
+      "scientific_name": "Complex: Phaeomoniella chlamydospora, Phaeoacremonium spp., Fomitiporia spp.",
+      "is_healthy": false,
+      "symptoms": "Tiger-stripe pattern on leaves: interveinal chlorosis with brown necrotic edges creating a striped appearance. Dark spotting on berries (measles-like). Cross-section of trunk shows dark streaking and necrotic wood tissue. Acute form causes sudden vine collapse (apoplexy).",
+      "treatment": {
+        "organic": "No effective organic cure exists. Reduce stress on vines through proper irrigation and nutrition. Remedial trunk surgery (cutting out infected wood) may extend vine life. Apply Trichoderma-based products to pruning wounds.",
+        "chemical": "No fully effective chemical treatment available. Thiophanate-methyl or carbendazim applied to pruning wounds may reduce spore entry. Sodium arsenite was historically used but is now banned in most regions. Fosetyl-aluminum trunk injections are under research."
+      },
+      "prevention": "Prune during dry periods to reduce wound infection risk. Apply wound protectant to large pruning cuts. Train vines to allow for possible trunk renewal. Avoid large pruning wounds when possible. If severe, retrain a new trunk from a basal sucker. Remove and destroy severely symptomatic vines.",
+      "fertilizer": "Maintain balanced nutrition to minimize vine stress. Adequate magnesium and calcium support vascular health. Avoid drought stress through consistent irrigation scheduling.",
+      "risk_level": "Critical"
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+      "crop": "Grape",
+      "disease": "Leaf Blight (Isariopsis Leaf Spot)",
+      "scientific_name": "Pseudocercospora vitis (syn. Isariopsis clavispora)",
+      "is_healthy": false,
+      "symptoms": "Dark brown to black angular lesions on leaves, restricted by veins. Lesions may coalesce causing large necrotic areas. Severe infection causes premature defoliation. More common on susceptible varieties and in warm, humid climates.",
+      "treatment": {
+        "organic": "Improve air circulation through canopy management. Apply copper-based fungicides at first sign of symptoms. Remove and destroy severely infected leaves. Ensure good drainage around vines.",
+        "chemical": "Apply Mancozeb, Chlorothalonil, or Carbendazim as protectant sprays at 10-14 day intervals during wet periods. Copper oxychloride is also effective. Begin sprays when conditions favor disease development."
+      },
+      "prevention": "Select tolerant grape varieties when available. Maintain open canopy through proper training and pruning. Avoid overhead irrigation. Ensure good weed control around vine bases. Remove crop residue at end of season. Practice balanced nutrition.",
+      "fertilizer": "Apply balanced NPK fertilizer based on soil analysis. Potassium helps improve disease tolerance. Avoid excess nitrogen which creates dense, humid canopy conditions.",
+      "risk_level": "Medium"
+    },
+    "Grape___healthy": {
+      "crop": "Grape",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are deep green, smooth, and well-formed with no spots or discoloration.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain canopy management practices.",
+        "chemical": "No chemical treatment required. Continue preventive spray program during wet seasons."
+      },
+      "prevention": "Maintain balanced nutrition and proper irrigation. Prune for open canopy structure. Monitor weekly for early disease signs. Remove old leaves and crop debris. Apply dormant sprays if disease pressure is historically high.",
+      "fertilizer": "Apply fertilizer based on tissue and soil analysis. Typical vineyard needs: 40-80 lbs N/acre, adequate K and Mg. Apply compost or organic matter to improve soil health.",
+      "risk_level": "Low"
+    },
+    "Orange___Haunglongbing_(Citrus_greening)": {
+      "crop": "Orange",
+      "disease": "Huanglongbing (Citrus Greening)",
+      "scientific_name": "Candidatus Liberibacter asiaticus",
+      "is_healthy": false,
+      "symptoms": "Asymmetric blotchy mottling of leaves (unlike nutrient deficiency which is symmetric). Yellowing of leaf veins. Fruit remains small, lopsided, and fails to color properly. Seeds are aborted (dark and shriveled). Fruit tastes bitter. Tree shows progressive decline with dieback.",
+      "treatment": {
+        "organic": "No cure exists. Control the Asian citrus psyllid vector using horticultural oils and kaolin clay. Apply nutritional sprays (micronutrient foliar feeds) to maintain tree health. Remove and destroy severely infected trees to reduce inoculum spread.",
+        "chemical": "Intensive psyllid control is critical: use systemic insecticides (Imidacloprid soil drench, Thiamethoxam) and foliar sprays (Fenpropathrin, Dimethoate). Enhanced nutrition programs with foliar micronutrients can help maintain tree productivity. Oxytetracycline trunk injections are approved in some regions."
+      },
+      "prevention": "Plant certified disease-free nursery stock. Implement area-wide psyllid suppression programs. Scout regularly for psyllids and treat promptly. Remove and replace infected trees. Maintain tree nutrition to prolong productive life. Monitor for HLB with PCR testing if symptoms appear.",
+      "fertilizer": "Enhanced foliar nutrition program: apply micronutrient cocktails (Mn, Zn, Mg, Fe, B) every 6-8 weeks. Increase potassium and calcium soil applications. Maintain soil pH near 6.5 for optimal nutrient availability. Infected trees require 25-50% more fertilizer than healthy trees.",
+      "risk_level": "Critical"
+    },
+    "Peach___Bacterial_spot": {
+      "crop": "Peach",
+      "disease": "Bacterial Spot",
+      "scientific_name": "Xanthomonas arboricola pv. pruni",
+      "is_healthy": false,
+      "symptoms": "Small, angular, water-soaked spots on leaves that turn purple-brown. Spots may coalesce and cause shot-hole appearance as necrotic tissue falls out. Fruit develops small, dark, sunken lesions with cracks. Twig cankers may form on susceptible varieties.",
+      "treatment": {
+        "organic": "Apply copper hydroxide sprays during petal fall (use with caution as copper can cause phytotoxicity on peach). Oxytetracycline (Mycoshield) provides suppression. Maintain tree vigor through proper nutrition. Remove severely infected shoots.",
+        "chemical": "Apply copper-based bactericides from petal fall onset. Combine copper + Mancozeb for improved efficacy and reduced phytotoxicity risk. Oxytetracycline applications during cover spray period. No bactericide provides complete control; management is suppressive."
+      },
+      "prevention": "Plant resistant or tolerant peach varieties (e.g., Contender, Redhaven). Avoid planting in sites with poor air drainage. Ensure proper tree spacing. Avoid overhead irrigation which promotes bacterial spread. Apply copper dormant sprays. Remove and destroy prunings.",
+      "fertilizer": "Support tree vigor with balanced NPK fertilizer. Apply nitrogen at 50-80 lbs/acre depending on tree age. Adequate calcium supports cell wall integrity against bacterial invasion. Apply potassium to improve overall stress tolerance.",
+      "risk_level": "High"
+    },
+    "Peach___healthy": {
+      "crop": "Peach",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are glossy green with no spots or deformities.",
+      "treatment": {
+        "organic": "No treatment needed. Apply dormant oil spray in late winter.",
+        "chemical": "No chemical treatment required. Maintain preventive program during critical infection periods."
+      },
+      "prevention": "Maintain balanced fertility. Apply dormant sprays (copper + oil) in winter. Prune for open center canopy. Monitor for insects and disease throughout growing season. Practice sanitation.",
+      "fertilizer": "Apply balanced fertilizer in early spring. Peach trees typically need 75-100 lbs N/acre for mature trees. Supplement with calcium and potassium based on soil test.",
+      "risk_level": "Low"
+    },
+    "Pepper_bell___Bacterial_spot": {
+      "crop": "Bell Pepper",
+      "disease": "Bacterial Spot",
+      "scientific_name": "Xanthomonas campestris pv. vesicatoria",
+      "is_healthy": false,
+      "symptoms": "Small, dark, water-soaked spots on leaves that become raised with pale halos. Spots may coalesce and cause leaf drop. Fruit develops raised, scabby, rough-textured lesions. Severe infection causes defoliation and exposes fruit to sunscald.",
+      "treatment": {
+        "organic": "Apply copper hydroxide sprays (Kocide, Badge) at first symptom appearance and repeat at 7-day intervals. Acibenzolar-S-methyl (Actigard) activates plant defense responses. Bacillus-based biofungicides provide supplemental control. Avoid working in wet fields.",
+        "chemical": "Apply copper + Mancozeb tank mix for improved control. Streptomycin applications during transplant stage. Acibenzolar-S-methyl as a systemic activator. Fixed copper products at 7-10 day intervals during rainy periods."
+      },
+      "prevention": "Use certified disease-free seed and transplants. Hot water seed treatment (125°F for 30 min). Practice 2-3 year crop rotation with non-solanaceous crops. Avoid overhead irrigation. Remove crop debris after harvest. Sanitize tools and equipment between fields.",
+      "fertilizer": "Apply balanced NPK based on soil test. Side-dress nitrogen at first fruit set. Calcium supplementation (gypsum or calcium nitrate) reduces blossom end rot risk and supports cell wall strength. Foliar calcium sprays during fruit development.",
+      "risk_level": "High"
+    },
+    "Pepper_bell___healthy": {
+      "crop": "Bell Pepper",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are deep green, smooth, and show no lesions or discoloration.",
+      "treatment": {
+        "organic": "No treatment needed.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Practice crop rotation. Use mulch to prevent soil splash. Provide consistent moisture. Stake or cage plants for support. Monitor for pests and disease regularly. Avoid planting in areas with recent solanaceous crop history.",
+      "fertilizer": "Apply well-balanced fertilizer at transplanting. Side-dress with nitrogen at first bloom. Provide calcium through gypsum or calcium nitrate to prevent blossom end rot. Peppers are moderately heavy potassium feeders.",
+      "risk_level": "Low"
+    },
+    "Potato___Early_blight": {
+      "crop": "Potato",
+      "disease": "Early Blight",
+      "scientific_name": "Alternaria solani",
+      "is_healthy": false,
+      "symptoms": "Dark brown to black circular lesions with distinctive concentric rings (target-board appearance) on older leaves first. Lesions may have yellow halos. Severely infected leaves yellow and drop. Tubers develop dark, sunken, dry lesions with leathery texture.",
+      "treatment": {
+        "organic": "Apply copper-based fungicides or Bacillus subtilis (Serenade) as protectants. Remove lower infected leaves. Apply compost tea sprays to boost beneficial microbial populations on leaf surfaces. Maintain plant vigor through proper nutrition.",
+        "chemical": "Apply Chlorothalonil (Bravo), Mancozeb, or Azoxystrobin on a 7-10 day preventive schedule beginning at tuber initiation or first symptoms. Alternate between fungicide classes. Apply Difenoconazole for curative action if symptoms are present."
+      },
+      "prevention": "Plant certified disease-free seed potatoes. Practice 3-year crop rotation away from solanaceous crops. Destroy volunteer potatoes and nightshade weeds. Maintain adequate plant nutrition (especially nitrogen and potassium). Irrigate in the morning. Hill soil around stems.",
+      "fertilizer": "Apply balanced NPK at planting. Side-dress nitrogen at hilling. Adequate potassium (150-200 lbs K2O/acre) is critical to reduce blight severity and improve tuber quality. Avoid excessive nitrogen which delays maturity and extends the susceptible period.",
+      "risk_level": "High"
+    },
+    "Potato___Late_blight": {
+      "crop": "Potato",
+      "disease": "Late Blight",
+      "scientific_name": "Phytophthora infestans",
+      "is_healthy": false,
+      "symptoms": "Water-soaked, dark green to brown irregular lesions on leaves, often starting at leaf tips or edges. White fuzzy sporulation visible on leaf undersides during humid conditions. Rapid blighting of entire plants in cool, wet weather. Tubers develop reddish-brown granular rot extending from skin inward.",
+      "treatment": {
+        "organic": "Apply copper-based fungicides (Bordeaux mixture) on a 5-7 day schedule during wet weather. Destroy all infected plant tissue immediately. Do not compost infected material. Bacillus-based products provide minimal supplemental control against late blight.",
+        "chemical": "Apply Chlorothalonil, Mancozeb, or Cymoxanil + Mancozeb on tight 5-7 day intervals during conducive weather. Metalaxyl/Mefenoxam (Ridomil Gold) for systemic protection. Fluopicolide (Presidio) or Mandipropamid (Revus) for aggressive strains. Act immediately at first sign."
+      },
+      "prevention": "Plant only certified disease-free seed potatoes. Eliminate cull piles and volunteer potato plants. Monitor weather forecasts for late blight-conducive conditions (cool 50-70°F, wet, overcast). Begin fungicide program before disease appears when conditions favor spread. Destroy crop residue thoroughly after harvest.",
+      "fertilizer": "Balanced NPK at planting. Moderate nitrogen to avoid promoting excessive foliage. Strong potassium program (200+ lbs K2O/acre) improves tuber resistance. Phosphorus supports root health. Calcium supplementation improves tuber quality.",
+      "risk_level": "Critical"
+    },
+    "Potato___healthy": {
+      "crop": "Potato",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are deep green with no lesions or discoloration.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain soil health with cover crops and compost.",
+        "chemical": "No chemical treatment required. Maintain preventive spray program in high-risk seasons."
+      },
+      "prevention": "Use certified seed. Practice 3+ year rotation. Eliminate volunteers. Maintain good soil drainage. Hill potatoes to protect tubers from spore-contaminated rain. Monitor regularly. Destroy crop residue after harvest.",
+      "fertilizer": "Apply based on soil test. Typical rates: 150-200 lbs N, 100-150 lbs P2O5, 150-250 lbs K2O per acre. Split nitrogen applications for best uptake. Side-dress at hilling stage.",
+      "risk_level": "Low"
+    },
+    "Raspberry___healthy": {
+      "crop": "Raspberry",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Canes and leaves appear healthy with no discoloration.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain mulch and cane management.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Remove spent floricanes after harvest. Thin primocanes for air circulation. Maintain grass-free weed control zone. Apply dormant lime-sulfur spray. Purchase virus-free planting stock.",
+      "fertilizer": "Apply balanced fertilizer in early spring. Raspberries prefer slightly acidic soil (pH 5.5-6.5). Apply 40-50 lbs N/acre. Supplement with potassium and magnesium based on soil test. Organic matter and compost improve soil structure.",
+      "risk_level": "Low"
+    },
+    "Soybean___healthy": {
+      "crop": "Soybean",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are uniformly green with normal trifoliate structure.",
+      "treatment": {
+        "organic": "No treatment needed.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Practice crop rotation with non-legume crops. Use seed treatments to protect against early-season diseases. Select varieties with resistance to prevalent regional diseases. Maintain proper row spacing. Scout fields regularly.",
+      "fertilizer": "Soybeans fix their own nitrogen via rhizobial symbiosis. Inoculate seed if field has no recent soybean history. Apply phosphorus and potassium based on soil test. Sulfur supplementation may benefit in deficient soils. Do not over-apply nitrogen as it suppresses nodulation.",
+      "risk_level": "Low"
+    },
+    "Squash___Powdery_mildew": {
+      "crop": "Squash",
+      "disease": "Powdery Mildew",
+      "scientific_name": "Podosphaera xanthii / Erysiphe cichoracearum",
+      "is_healthy": false,
+      "symptoms": "White, talcum-like powdery fungal colonies on upper leaf surfaces. Colonies spread to cover entire leaves. Severely infected leaves turn yellow and brown, becoming brittle and dying. Petioles and stems can also be infected. Premature defoliation reduces fruit quality.",
+      "treatment": {
+        "organic": "Apply potassium bicarbonate (MilStop) or sulfur sprays at first sign. Neem oil provides moderate suppression. Baking soda solution (1 tbsp/gallon + soap) as budget alternative. Bacillus subtilis (Serenade) biofungicide. Milk spray (40% milk to water) has shown efficacy.",
+        "chemical": "Apply Myclobutanil (Rally) or Trifloxystrobin (Flint) at first sign. Alternate fungicide classes to prevent resistance. Chlorothalonil as a protectant. Apply every 7-14 days during active infection period."
+      },
+      "prevention": "Plant powdery mildew-resistant varieties. Ensure adequate plant spacing for air circulation. Avoid overhead irrigation. Remove and destroy infected leaves early. Provide full sun exposure. Avoid excess nitrogen fertilization which promotes lush, susceptible growth.",
+      "fertilizer": "Apply balanced NPK at planting. Side-dress nitrogen at vine run. Squash are heavy feeders and benefit from compost incorporation. Potassium supplementation improves disease resistance and fruit quality.",
+      "risk_level": "Medium"
+    },
+    "Strawberry___Leaf_scorch": {
+      "crop": "Strawberry",
+      "disease": "Leaf Scorch",
+      "scientific_name": "Diplocarpon earlianum",
+      "is_healthy": false,
+      "symptoms": "Numerous small, dark purple spots on upper leaf surfaces that enlarge and merge. Centers of spots may become tan or gray but do not develop distinct borders (unlike leaf spot). Severely affected leaves appear scorched, turn brown, and curl at edges. Calyxes, petioles, and runners can also be infected.",
+      "treatment": {
+        "organic": "Remove and destroy infected leaves. Improve air circulation by proper plant spacing. Apply copper-based fungicides in early spring before bloom. Renovate beds after harvest by mowing and removing old foliage.",
+        "chemical": "Apply Captan or Myclobutanil starting at first leaf emergence in spring. Continue at 7-10 day intervals through harvest. Switch to Pristine or Cabrio for broader spectrum control. Post-harvest renovation with fungicide application."
+      },
+      "prevention": "Plant resistant strawberry varieties. Ensure 12-18 inch plant spacing in rows. Maintain clean, weed-free beds. Use straw mulch to reduce soil splash. Practice field rotation (3-4 year cycle). Remove old infected leaves during renovation. Use drip irrigation instead of overhead sprinklers.",
+      "fertilizer": "Apply balanced starter fertilizer at planting. Strawberries require moderate nitrogen (40-60 lbs N/acre). High potassium supports fruit quality and disease resistance. Calcium prevents fruit rot and supports cell wall integrity.",
+      "risk_level": "Medium"
+    },
+    "Strawberry___healthy": {
+      "crop": "Strawberry",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are bright green, trifoliate, with smooth edges and no spots.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain mulch and bed hygiene.",
+        "chemical": "No chemical treatment required."
+      },
+      "prevention": "Use certified disease-free plants. Practice crop rotation. Maintain clean beds. Apply straw mulch for weed suppression and to protect fruit. Renovate beds annually after harvest. Remove runners as needed to prevent overcrowding.",
+      "fertilizer": "Balanced fertilizer at planting and side-dress after first harvest. 40-60 lbs N/acre seasonally. Potassium and calcium are important for fruit quality. Apply based on soil test results.",
+      "risk_level": "Low"
+    },
+    "Tomato___Bacterial_spot": {
+      "crop": "Tomato",
+      "disease": "Bacterial Spot",
+      "scientific_name": "Xanthomonas campestris pv. vesicatoria",
+      "is_healthy": false,
+      "symptoms": "Small, irregular, dark brown to black spots with yellow halos on leaves. Spots may become angular and water-soaked. Fruit develops raised, scabby, dark brown lesions that are rough-textured. Severe infection causes extensive defoliation, exposing fruit to sunscald.",
+      "treatment": {
+        "organic": "Apply copper hydroxide + Mancozeb combination at first sign. Actigard (Acibenzolar-S-methyl) as systemic defense activator. Avoid working with wet plants. Remove heavily infected plants. Bacillus-based biofungicides for supplemental control.",
+        "chemical": "Copper compounds + Mancozeb at 7-day intervals. Streptomycin during transplant stage. Actigard as systemic acquired resistance inducer. No bactericide provides complete control once established; management is suppressive."
+      },
+      "prevention": "Use certified pathogen-free seed and transplants. Hot water seed treatment (122°F for 25 min). Practice 2-3 year rotation away from solanaceous crops. Remove all crop residue. Avoid overhead irrigation. Sanitize stakes, cages, and equipment between seasons.",
+      "fertilizer": "Balanced NPK at transplanting. Side-dress nitrogen at first fruit set. Calcium supplementation reduces susceptibility and prevents blossom end rot. Avoid excessive nitrogen which promotes lush, disease-prone growth.",
+      "risk_level": "High"
+    },
+    "Tomato___Early_blight": {
+      "crop": "Tomato",
+      "disease": "Early Blight",
+      "scientific_name": "Alternaria solani",
+      "is_healthy": false,
+      "symptoms": "Dark brown to black circular lesions with concentric rings (bull's-eye or target-board pattern) appearing first on lower, older leaves. Lesions often have yellow halos. Stems develop dark, sunken cankers. Fruit develops leathery, sunken, dark lesions near the stem end.",
+      "treatment": {
+        "organic": "Apply copper-based fungicides or Bacillus subtilis (Serenade) preventatively. Remove lower infected leaves. Mulch with straw or wood chips to prevent soil splash. Apply compost tea for beneficial microbial support.",
+        "chemical": "Apply Chlorothalonil (Daconil), Mancozeb, or Azoxystrobin (Quadris) on 7-10 day intervals starting when first symptoms appear or at first fruit set. Alternate fungicide classes. Difenoconazole provides curative action."
+      },
+      "prevention": "Practice 3-year crop rotation away from tomatoes, potatoes, and peppers. Stake or cage plants for air circulation. Apply mulch to prevent soil splash. Water at base of plant early in the morning. Remove and destroy lower leaves showing symptoms. Remove all crop debris after season.",
+      "fertilizer": "Balanced NPK at transplanting. Adequate calcium prevents blossom end rot. Potassium improves disease resistance. Avoid excess nitrogen. Side-dress at first fruit set and after first harvest.",
+      "risk_level": "High"
+    },
+    "Tomato___Late_blight": {
+      "crop": "Tomato",
+      "disease": "Late Blight",
+      "scientific_name": "Phytophthora infestans",
+      "is_healthy": false,
+      "symptoms": "Large, irregular, water-soaked, greenish-gray to brown lesions on leaves, often starting at leaf tips. White fuzzy sporulation on leaf undersides during humid mornings. Rapid plant collapse in 3-5 days under favorable conditions. Fruit develops large, firm, dark greasy-looking lesions.",
+      "treatment": {
+        "organic": "Apply copper-based fungicides (Bordeaux mixture) immediately on very tight 5-day schedule. Remove and destroy ALL infected tissue immediately — do NOT compost. Late blight spreads rapidly and infected material must be bagged and disposed of, not left in garden.",
+        "chemical": "Apply Chlorothalonil or Mancozeb preventatively. Cymoxanil + Mancozeb (Curzate) for curative and protectant action. Mandipropamid (Revus) or Fluopicolide (Presidio) for aggressive strains. Apply at very tight intervals (5-7 days) during outbreaks."
+      },
+      "prevention": "Plant resistant varieties when available. Monitor regional late blight forecasting services. Starting preventive sprays when conditions favor disease (cool 50-70°F, wet, overcast). Do not plant near potato fields. Destroy all volunteer tomato and potato plants. Remove crop debris completely.",
+      "fertilizer": "Moderate balanced fertilizer program. Avoid excess nitrogen. Strong potassium program improves plant defense responses. Calcium improves cell wall strength. Avoid overhead irrigation.",
+      "risk_level": "Critical"
+    },
+    "Tomato___Leaf_Mold": {
+      "crop": "Tomato",
+      "disease": "Leaf Mold",
+      "scientific_name": "Passalora fulva (syn. Fulvia fulva, Cladosporium fulvum)",
+      "is_healthy": false,
+      "symptoms": "Pale green to yellowish spots on upper leaf surfaces. Olive-green to grayish-brown velvety mold growth on leaf undersides directly below the pale spots. Older leaves affected first. Severely infected leaves curl, wither, and drop. Most common in greenhouse/high-tunnel production with high humidity.",
+      "treatment": {
+        "organic": "Improve ventilation to reduce humidity below 85%. Remove lower infected leaves. Apply Bacillus subtilis or potassium bicarbonate sprays. Increase spacing between plants. Use drip irrigation only.",
+        "chemical": "Apply Chlorothalonil or Mancozeb as protectant. Azoxystrobin or Difenoconazole for curative and protectant action. Reduce greenhouse humidity to below 85% as primary control. Apply at 7-10 day intervals."
+      },
+      "prevention": "Grow leaf mold-resistant tomato varieties (look for Cf gene resistance). Maintain greenhouse humidity below 85% through ventilation and heating. Avoid overhead watering. Space plants adequately. Prune lower leaves for air circulation. Sanitize greenhouse between seasons.",
+      "fertilizer": "Balanced NPK program. Avoid excess nitrogen which promotes dense, humid canopy. Calcium supplementation supports healthy tissue development.",
+      "risk_level": "Medium"
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "crop": "Tomato",
+      "disease": "Septoria Leaf Spot",
+      "scientific_name": "Septoria lycopersici",
+      "is_healthy": false,
+      "symptoms": "Numerous small (1/8 inch), circular spots with dark brown borders and gray to tan centers on lower leaves. Tiny black dots (pycnidia) visible in spot centers with magnification. Spots are more numerous and smaller than early blight. Severe infection causes extensive defoliation from the bottom up.",
+      "treatment": {
+        "organic": "Remove infected lower leaves promptly. Apply copper-based fungicides or Bacillus subtilis (Serenade). Mulch to prevent soil splash. Apply neem oil for supplemental control.",
+        "chemical": "Apply Chlorothalonil (Daconil) or Mancozeb on 7-10 day intervals beginning at first symptom. Azoxystrobin provides systemicprotection. Difenoconazole for curative action. Alternate fungicide classes throughout the season."
+      },
+      "prevention": "Practice 3-year crop rotation. Stake and prune plants for air circulation. Mulch to prevent soil splash. Water at plant base, not overhead. Remove and destroy all crop debris at season end. Avoid working in wet foliage.",
+      "fertilizer": "Balanced NPK fertilizer. Adequate potassium strengthens plant cell walls. Avoid excessive nitrogen. Apply calcium to support strong, disease-resistant tissue growth.",
+      "risk_level": "High"
+    },
+    "Tomato___Spider_mites_Two-spotted_spider_mite": {
+      "crop": "Tomato",
+      "disease": "Spider Mites (Two-spotted Spider Mite)",
+      "scientific_name": "Tetranychus urticae",
+      "is_healthy": false,
+      "symptoms": "Fine stippling (tiny yellow dots) on upper leaf surfaces as mites feed from below. Fine silk webbing visible on leaf undersides and between leaves. Leaves turn bronze, dry, and brittle. Severe infestations cause leaf drop and plant stress. Mites are tiny and best seen with a hand lens.",
+      "treatment": {
+        "organic": "Spray plants forcefully with water to dislodge mites. Apply neem oil or insecticidal soap (covering leaf undersides). Release predatory mites (Phytoseiulus persimilis, Neoseiulus californicus) as biological control. Apply horticultural oil at 1-2% concentration.",
+        "chemical": "Apply miticide such as Abamectin (Agri-Mek), Bifenazate (Acramite), or Spiromesifen (Oberon). Rotate miticide classes to prevent resistance. Avoid broad-spectrum insecticides (such as pyrethroids) that kill natural predators and cause mite flare-ups."
+      },
+      "prevention": "Monitor plants regularly with hand lens, checking leaf undersides. Maintain adequate irrigation as drought-stressed plants are more susceptible. Avoid excessive nitrogen which favors mite reproduction. Conserve natural predators by minimizing broad-spectrum insecticide use. Control dusty conditions which favor mites.",
+      "fertilizer": "Balanced NPK program. Avoid excess nitrogen which makes plants more attractive to mites. Adequate potassium and calcium support plant stress tolerance. Maintain consistent irrigation to avoid drought stress.",
+      "risk_level": "Medium"
+    },
+    "Tomato___Target_Spot": {
+      "crop": "Tomato",
+      "disease": "Target Spot",
+      "scientific_name": "Corynespora cassiicola",
+      "is_healthy": false,
+      "symptoms": "Brown circular lesions with concentric rings on leaves, similar to early blight but typically smaller. Lesions often have tan to light brown centers. Can affect leaves, stems, and fruit. Fruit lesions are small, circular, sunken with concentric rings. Severe infection causes premature defoliation.",
+      "treatment": {
+        "organic": "Remove lower infected leaves. Apply copper-based fungicides. Improve air circulation through pruning and spacing. Apply Bacillus-based biofungicides for supplemental control. Mulch to prevent soil splash.",
+        "chemical": "Apply Chlorothalonil, Mancozeb, or strobilurin fungicides (Azoxystrobin) on 7-10 day intervals. Difenoconazole provides curative action. Begin sprays at first symptom or shortly after first fruit set. Rotate fungicide classes."
+      },
+      "prevention": "Practice crop rotation with non-solanaceous crops. Remove all crop residue after harvest. Stake and prune plants for airflow. Avoid overhead irrigation. Use mulch to reduce soil splash. Plant in well-drained soil.",
+      "fertilizer": "Balanced NPK at transplanting. Avoid excess nitrogen. Potassium and calcium support disease resistance. Side-dress nitrogen at first fruit set.",
+      "risk_level": "Medium"
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "crop": "Tomato",
+      "disease": "Tomato Yellow Leaf Curl Virus",
+      "scientific_name": "TYLCV (Begomovirus, transmitted by whiteflies)",
+      "is_healthy": false,
+      "symptoms": "Severe upward curling and cupping of leaves with prominent yellowing of leaf margins. Leaves become small, crumpled, and leathery. Plant growth is stunted with shortened internodes giving a bushy appearance. Flower drop and drastically reduced fruit set. Plants infected early may produce no marketable fruit.",
+      "treatment": {
+        "organic": "No cure for viral infection. Control whitefly vectors with yellow sticky traps, reflective mulch, neem oil, and insecticidal soaps. Remove and destroy infected plants immediately to reduce virus spread. Release whitefly parasitoids (Encarsia formosa, Eretmocerus spp.).",
+        "chemical": "Control whiteflies aggressively with systemic insecticides: Imidacloprid (soil drench at transplant), Cyantraniliprole, or Spiromesifen (Oberon). Pyriproxyfen as an insect growth regulator. There is NO cure once a plant is infected; focus is entirely on vector control and removing infected plants."
+      },
+      "prevention": "Plant TYLCV-resistant tomato varieties (Ty gene resistance). Use reflective silver mulch to repel whiteflies. Install fine mesh (50-mesh) insect netting over seedlings. Control weeds that harbor whiteflies. Transplant during whitefly-low seasons if possible. Remove crop residue promptly after harvest.",
+      "fertilizer": "Balanced nutrition program. Infected plants have reduced uptake capacity, so foliar feeding may help maintain some productivity. Potassium supports viral disease tolerance. Do not over-fertilize infected plants.",
+      "risk_level": "Critical"
+    },
+    "Tomato___Tomato_mosaic_virus": {
+      "crop": "Tomato",
+      "disease": "Tomato Mosaic Virus",
+      "scientific_name": "ToMV (Tobamovirus)",
+      "is_healthy": false,
+      "symptoms": "Mosaic pattern of light and dark green mottling on leaves. Leaves may be distorted, curled, or fern-like (shoestring). Young leaves may show yellowish mottling. Fruit may have internal browning (brownwall) or uneven ripening. Plant growth may be stunted, especially with early infection.",
+      "treatment": {
+        "organic": "No cure exists for viral infections. Remove and destroy infected plants immediately. Disinfect hands and tools with milk solution (20% nonfat dry milk) or 10% trisodium phosphate between plants. Do NOT use bleach as it is less effective against tobamoviruses.",
+        "chemical": "No chemical treatment controls the virus. Prevention through sanitation and resistant varieties is the only approach. Systemic acquired resistance inducers (Actigard) may provide partial protection when applied preventatively."
+      },
+      "prevention": "Plant ToMV-resistant varieties (Tm-2 or Tm-2² resistance genes). Use certified virus-free seed. Soak seed in 10% trisodium phosphate for 15 min before planting. Wash hands with soap and milk solution before handling plants. Avoid touching plants when wet. Do not use tobacco products near tomato plants. Sanitize all tools.",
+      "fertilizer": "Standard balanced NPK program. Infected plants have stunted growth and reduced nutrient needs. Potassium supports some virus tolerance. Avoid excess nitrogen on infected plants.",
+      "risk_level": "High"
+    },
+    "Tomato___healthy": {
+      "crop": "Tomato",
+      "disease": "Healthy",
+      "scientific_name": null,
+      "is_healthy": true,
+      "symptoms": "No disease symptoms detected. Leaves are uniformly green with no spots, mottling, or deformities.",
+      "treatment": {
+        "organic": "No treatment needed. Maintain good cultural practices and monitor regularly.",
+        "chemical": "No chemical treatment required. Continue preventive integrated pest management program."
+      },
+      "prevention": "Practice 3-year crop rotation. Stake and prune for air circulation. Water at base in morning. Mulch to prevent soil splash. Remove volunteers. Scout weekly for pests and disease. Use resistant varieties when possible. Sanitize tools between plants.",
+      "fertilizer": "Balanced NPK at transplanting. Side-dress nitrogen at first fruit set and after first harvest. Calcium (gypsum or calcium nitrate) to prevent blossom end rot. Potassium for fruit quality. Apply based on soil test.",
+      "risk_level": "Low"
+    }
+  }
+}

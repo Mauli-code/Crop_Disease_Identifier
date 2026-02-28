@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CropDoc AI - Intelligent crop disease detection from leaf images using AI. Works offline.">
+    <meta name="theme-color" content="#0a1a0f">
+    <title>CropDoc AI — Crop Disease Identifier</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js"></script>
+</head>
+<body>
+    <!-- ═══ Status Bar ═══ -->
+    <div class="status-bar">
+        <div class="status-indicator" id="statusIndicator">
+            <span class="status-dot"></span>
+            <span class="status-text" id="statusText">Checking connection...</span>
+        </div>
+        <div class="status-mode" id="statusMode">—</div>
+    </div>
+
+    <!-- ═══ Hero Section ═══ -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="logo">
+                <div class="logo-icon">🌿</div>
+                <h1>CropDoc <span class="highlight">AI</span></h1>
+            </div>
+            <p class="tagline">Intelligent Crop Disease Detection — Powered by On-Device AI</p>
+            <p class="sub-tagline">Upload a leaf photo to instantly identify diseases, get severity estimates, and receive actionable treatment recommendations.</p>
+        </div>
+    </header>
+
+    <!-- ═══ Main App ═══ -->
+    <main class="app-container">
+        <!-- Upload Section -->
+        <section class="upload-section" id="uploadSection">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <h2>Upload Leaf Image</h2>
+                <p>Drag & drop an image here, or click to browse</p>
+                <p class="upload-hint">Supports JPEG, PNG, WebP — Max 5MB</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+
+            <div class="action-row">
+                <button class="btn btn-primary" id="uploadBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    Choose Image
+                </button>
+                <button class="btn btn-secondary" id="cameraBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    Take Photo
+                </button>
+            </div>
+        </section>
+
+        <!-- Preview Section (hidden initially) -->
+        <section class="preview-section hidden" id="previewSection">
+            <div class="preview-card">
+                <div class="preview-image-container">
+                    <img id="previewImage" alt="Uploaded leaf image preview">
+                </div>
+                <div class="preview-actions">
+                    <button class="btn btn-primary btn-analyze" id="analyzeBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                        Analyze Disease
+                    </button>
+                    <button class="btn btn-ghost" id="clearBtn">Clear & Upload New</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <section class="loading-section hidden" id="loadingSection">
+            <div class="loader">
+                <div class="loader-ring"></div>
+                <div class="loader-leaf">🌿</div>
+            </div>
+            <p class="loading-text" id="loadingText">Analyzing leaf image...</p>
+            <p class="loading-sub">Running AI inference <span id="modeLabel">locally</span></p>
+        </section>
+
+        <!-- Results Section (hidden initially) -->
+        <section class="results-section hidden" id="resultsSection">
+            <!-- Diagnosis Header -->
+            <div class="result-header" id="resultHeader">
+                <div class="result-status" id="resultStatus">
+                    <span class="result-emoji" id="resultEmoji">🔬</span>
+                    <div>
+                        <h2 id="resultDisease">—</h2>
+                        <p class="result-crop" id="resultCrop">—</p>
+                    </div>
+                </div>
+                <div class="result-badge" id="resultBadge">
+                    <span id="resultRiskLevel">—</span>
+                </div>
+            </div>
+
+            <!-- Confidence & Severity -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Confidence</div>
+                    <div class="metric-value" id="resultConfidence">—</div>
+                    <div class="metric-bar">
+                        <div class="metric-bar-fill" id="confidenceBar"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Severity</div>
+                    <div class="metric-value" id="resultSeverity">—</div>
+                    <div class="severity-dots" id="severityDots">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scientific Info -->
+            <div class="info-card" id="scientificCard">
+                <h3>🔬 Scientific Information</h3>
+                <p id="resultScientific">—</p>
+            </div>
+
+            <!-- Symptoms -->
+            <div class="info-card">
+                <h3>🩺 Symptoms</h3>
+                <p id="resultSymptoms">—</p>
+            </div>
+
+            <!-- Treatment -->
+            <div class="info-card treatment-card">
+                <h3>💊 Treatment</h3>
+                <div class="treatment-tabs">
+                    <button class="tab active" data-tab="organic" id="tabOrganic">🌱 Organic</button>
+                    <button class="tab" data-tab="chemical" id="tabChemical">🧪 Chemical</button>
+                </div>
+                <div class="tab-content active" id="treatmentOrganic">—</div>
+                <div class="tab-content" id="treatmentChemical">—</div>
+            </div>
+
+            <!-- Prevention -->
+            <div class="info-card">
+                <h3>🛡️ Prevention</h3>
+                <p id="resultPrevention">—</p>
+            </div>
+
+            <!-- Fertilizer -->
+            <div class="info-card">
+                <h3>🌾 Fertilizer Recommendation</h3>
+                <p id="resultFertilizer">—</p>
+            </div>
+
+            <!-- Top Predictions -->
+            <div class="info-card" id="topPredictionsCard">
+                <h3>📊 Alternative Diagnoses</h3>
+                <div id="topPredictions" class="top-predictions"></div>
+            </div>
+
+            <!-- New Analysis Button -->
+            <button class="btn btn-primary btn-full" id="newAnalysisBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"/>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                </svg>
+                New Analysis
+            </button>
+        </section>
+
+        <!-- Camera Modal -->
+        <div class="modal hidden" id="cameraModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📷 Camera Capture</h3>
+                    <button class="modal-close" id="closeCameraModal">✕</button>
+                </div>
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" hidden></canvas>
+                <button class="btn btn-primary btn-full" id="captureBtn">Capture Photo</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="footer">
+        <p>CropDoc AI v1.0 — On-Device Crop Disease Detection</p>
+        <p class="footer-sub">Powered by TensorFlow.js & MobileNetV2 | 38 Disease Classes | Works Offline</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/static/js/preprocess.js"></script>
+    <script src="/static/js/offline.js"></script>
+    <script src="/static/js/online.js"></script>
+    <script src="/static/js/app.js"></script>
+
+    <script>
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+                    .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
