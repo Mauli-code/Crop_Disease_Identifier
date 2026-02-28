@@ -4,15 +4,14 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-.eggs/
-*.egg
-venv/
 .venv/
+venv/
 env/
 
-# Model files (large, add manually or use Git LFS)
+# Model files (user provides these manually)
 model.h5
 static/models/*.bin
+static/models/model.json
 
 # OS
 .DS_Store
@@ -23,6 +22,5 @@ Thumbs.db
 .idea/
 
 # Replit
+.replit.nix
 .cache/
-.config/
-.upm/
