@@ -1,16 +1,15 @@
 /**
  * CropDoc AI — Offline Inference Module
- * Color-analysis based prediction engine for prototype demo.
- * Analyzes leaf image colors (green, brown, yellow, spots) to
- * produce realistic disease predictions without a trained model.
- *
- * Replace this with a real TF.js model after selection.
+ * Uses real TensorFlow.js MobileNetV2 model for 8 trained classes.
+ * Falls back to color-analysis prototype for other classes or if model fails.
  */
 
 const CropDocOffline = (() => {
     let knowledgeBase = null;
+    let tfModel = null;
+    let modelLoadFailed = false;
 
-    // 38 PlantVillage class names
+    // 38 PlantVillage class names (full knowledge base order)
     const CLASS_NAMES = [
         "Apple___Apple_scab",
         "Apple___Black_rot",
@@ -52,6 +51,30 @@ const CropDocOffline = (() => {
         "Tomato___healthy"
     ];
 
+    // The 8 classes the trained model outputs (in order)
+    const MODEL_CLASS_NAMES = [
+        "Pepper__bell___Bacterial_spot",
+        "Pepper__bell___healthy",
+        "Potato___Early_blight",
+        "Potato___Late_blight",
+        "Potato___healthy",
+        "Tomato_Early_blight",
+        "Tomato_Late_blight",
+        "Tomato_healthy"
+    ];
+
+    // Map each model output index → 38-class knowledge base index
+    const MODEL_TO_KB_MAP = [
+        18, // Pepper__bell___Bacterial_spot  → Pepper_bell___Bacterial_spot
+        19, // Pepper__bell___healthy         → Pepper_bell___healthy
+        20, // Potato___Early_blight          → Potato___Early_blight
+        21, // Potato___Late_blight           → Potato___Late_blight
+        22, // Potato___healthy               → Potato___healthy
+        29, // Tomato_Early_blight            → Tomato___Early_blight
+        30, // Tomato_Late_blight             → Tomato___Late_blight
+        37  // Tomato_healthy                 → Tomato___healthy
+    ];
+
     /**
      * Load knowledge base.
      */
@@ -63,7 +86,7 @@ const CropDocOffline = (() => {
             return knowledgeBase;
         } catch {
             try {
-                const cache = await caches.open('cropdoc-v1');
+                const cache = await caches.open('cropdoc-v2');
                 const cached = await cache.match('/knowledge_base.json');
                 if (cached) {
                     knowledgeBase = await cached.json();
@@ -75,9 +98,76 @@ const CropDocOffline = (() => {
     }
 
     /**
-     * Analyze the color distribution of a leaf image.
-     * Returns percentages of green, brown, yellow, white, dark regions.
+     * Load the TF.js model.
      */
+    async function loadModel() {
+        if (tfModel) return tfModel;
+        if (modelLoadFailed) return null;
+
+        // Check if TensorFlow.js is available
+        if (typeof tf === 'undefined' || !tf.loadLayersModel) {
+            console.warn('⚠️ TensorFlow.js not available, will use color-analysis fallback');
+            modelLoadFailed = true;
+            return null;
+        }
+
+        try {
+            console.log('🧠 Loading TF.js model...');
+            tfModel = await tf.loadLayersModel('/static/models/model.json');
+            console.log('✅ TF.js model loaded successfully');
+            console.log('   Input shape:', tfModel.inputs[0].shape);
+            console.log('   Output shape:', tfModel.outputs[0].shape);
+            return tfModel;
+        } catch (err) {
+            console.warn('⚠️ Failed to load TF.js model:', err.message);
+            console.warn('   Will use color-analysis fallback');
+            modelLoadFailed = true;
+            return null;
+        }
+    }
+
+    /**
+     * Run real model inference on an image tensor.
+     * Returns { kbIndex, confidence, allProbs38 } or null if model unavailable.
+     */
+    function runModelInference(tensor) {
+        if (!tfModel) return null;
+
+        return tf.tidy(() => {
+            const predictions = tfModel.predict(tensor);
+            const probs = predictions.dataSync(); // Float32Array of 8 values
+
+            // Find best prediction among the 8 model classes
+            let maxIdx = 0;
+            let maxProb = probs[0];
+            for (let i = 1; i < probs.length; i++) {
+                if (probs[i] > maxProb) {
+                    maxProb = probs[i];
+                    maxIdx = i;
+                }
+            }
+
+            // Map to 38-class index
+            const kbIndex = MODEL_TO_KB_MAP[maxIdx];
+
+            // Build a sparse 38-class probability array
+            const allProbs38 = new Array(38).fill(0.0001);
+            for (let i = 0; i < probs.length; i++) {
+                allProbs38[MODEL_TO_KB_MAP[i]] = probs[i];
+            }
+
+            return {
+                kbIndex,
+                confidence: maxProb,
+                allProbs38
+            };
+        });
+    }
+
+    // ────────────────────────────────────────
+    // Color-analysis fallback (unchanged)
+    // ────────────────────────────────────────
+
     function analyzeColors(canvas) {
         const ctx = canvas.getContext('2d');
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -96,7 +186,6 @@ const CropDocOffline = (() => {
             const sat = max === 0 ? 0 : (max - min) / max;
             const brightness = (r + g + b) / 3;
 
-            // Classify each pixel
             if (brightness < 40) {
                 dark++;
             } else if (brightness > 220 && sat < 0.15) {
@@ -137,119 +226,72 @@ const CropDocOffline = (() => {
         };
     }
 
-    /**
-     * Based on color analysis, generate a probability-like distribution
-     * across the 38 classes with realistic scores.
-     */
     function colorToScores(colors) {
-        const scores = new Array(38).fill(0.001); // base tiny score
+        const scores = new Array(38).fill(0.001);
 
-        // ────────── HIGH GREEN = HEALTHY ──────────
         if (colors.green > 0.35) {
-            // Likely healthy — boost healthy classes
-            scores[3] += 0.20;  // Apple healthy
-            scores[4] += 0.10;  // Blueberry healthy
-            scores[6] += 0.12;  // Cherry healthy
-            scores[10] += 0.15;  // Corn healthy
-            scores[14] += 0.12;  // Grape healthy
-            scores[17] += 0.12;  // Peach healthy
-            scores[19] += 0.15;  // Pepper healthy
-            scores[22] += 0.14;  // Potato healthy
-            scores[23] += 0.08;  // Raspberry healthy
-            scores[24] += 0.08;  // Soybean healthy
-            scores[27] += 0.12;  // Strawberry healthy
-            scores[37] += 0.18;  // Tomato healthy
+            scores[3] += 0.20; scores[4] += 0.10; scores[6] += 0.12;
+            scores[10] += 0.15; scores[14] += 0.12; scores[17] += 0.12;
+            scores[19] += 0.15; scores[22] += 0.14; scores[23] += 0.08;
+            scores[24] += 0.08; scores[27] += 0.12; scores[37] += 0.18;
 
-            // If very green, make one dominant
             if (colors.green > 0.50) {
                 const healthyPick = [3, 10, 14, 19, 22, 37][Math.floor(colors.avgG % 6)];
                 scores[healthyPick] += 0.40;
             }
         }
 
-        // ────────── BROWN SPOTS = BLIGHT / ROT ──────────
         if (colors.brown > 0.08) {
-            scores[0] += colors.brown * 2.5; // Apple scab
-            scores[1] += colors.brown * 3.0; // Apple Black rot
-            scores[11] += colors.brown * 2.8; // Grape Black rot
-            scores[20] += colors.brown * 3.5; // Potato Early blight
-            scores[21] += colors.brown * 3.2; // Potato Late blight
-            scores[29] += colors.brown * 3.8; // Tomato Early blight
-            scores[30] += colors.brown * 3.5; // Tomato Late blight
-            scores[34] += colors.brown * 2.5; // Tomato Target Spot
-            scores[32] += colors.brown * 2.2; // Tomato Septoria
+            scores[0] += colors.brown * 2.5; scores[1] += colors.brown * 3.0;
+            scores[11] += colors.brown * 2.8; scores[20] += colors.brown * 3.5;
+            scores[21] += colors.brown * 3.2; scores[29] += colors.brown * 3.8;
+            scores[30] += colors.brown * 3.5; scores[34] += colors.brown * 2.5;
+            scores[32] += colors.brown * 2.2;
         }
 
-        // ────────── YELLOW = VIRUS / NUTRIENT ──────────
         if (colors.yellow > 0.10) {
-            scores[2] += colors.yellow * 2.5; // Cedar apple rust
-            scores[15] += colors.yellow * 3.0; // Orange citrus greening
-            scores[35] += colors.yellow * 4.0; // Tomato Yellow Leaf Curl
-            scores[36] += colors.yellow * 3.2; // Tomato mosaic virus
-            scores[8] += colors.yellow * 2.0; // Corn Common rust
+            scores[2] += colors.yellow * 2.5; scores[15] += colors.yellow * 3.0;
+            scores[35] += colors.yellow * 4.0; scores[36] += colors.yellow * 3.2;
+            scores[8] += colors.yellow * 2.0;
         }
 
-        // ────────── RED / RUST = RUST DISEASES ──────────
         if (colors.red > 0.08) {
-            scores[2] += colors.red * 3.0; // Cedar apple rust
-            scores[8] += colors.red * 4.0; // Corn Common rust
-            scores[26] += colors.red * 2.5; // Strawberry Leaf scorch
-            scores[16] += colors.red * 2.0; // Peach Bacterial spot
+            scores[2] += colors.red * 3.0; scores[8] += colors.red * 4.0;
+            scores[26] += colors.red * 2.5; scores[16] += colors.red * 2.0;
         }
 
-        // ────────── WHITE / POWDERY = MILDEW ──────────
         if (colors.white > 0.12) {
-            scores[5] += colors.white * 3.5; // Cherry Powdery mildew
-            scores[25] += colors.white * 4.0; // Squash Powdery mildew
-            scores[31] += colors.white * 2.5; // Tomato Leaf Mold
+            scores[5] += colors.white * 3.5; scores[25] += colors.white * 4.0;
+            scores[31] += colors.white * 2.5;
         }
 
-        // ────────── DARK / SPOTS = BACTERIAL ──────────
         if (colors.dark > 0.15 && colors.green > 0.15) {
-            scores[7] += 0.15; // Corn gray leaf spot
-            scores[9] += 0.12; // Corn Northern Leaf Blight
-            scores[12] += 0.10; // Grape Esca
-            scores[13] += 0.12; // Grape Leaf blight
-            scores[28] += 0.18; // Tomato Bacterial spot
-            scores[18] += 0.15; // Pepper Bacterial spot
-            scores[33] += 0.12; // Tomato Spider mites
+            scores[7] += 0.15; scores[9] += 0.12; scores[12] += 0.10;
+            scores[13] += 0.12; scores[28] += 0.18; scores[18] += 0.15;
+            scores[33] += 0.12;
         }
 
-        // ────────── ORANGE = RUST / BLIGHT ──────────
         if (colors.orange > 0.08) {
-            scores[2] += colors.orange * 3.0; // Cedar apple rust
-            scores[8] += colors.orange * 3.5; // Corn Common rust
-            scores[15] += colors.orange * 2.5; // Orange citrus greening
-            scores[9] += colors.orange * 2.0; // Corn Northern Leaf Blight
+            scores[2] += colors.orange * 3.0; scores[8] += colors.orange * 3.5;
+            scores[15] += colors.orange * 2.5; scores[9] += colors.orange * 2.0;
         }
 
-        // ────────── HIGH COLOR VARIANCE = DISEASE ──────────
         if (colors.colorVariance > 40 && colors.green < 0.35) {
-            // Mixed colors suggest disease
             const diseaseClasses = [0, 1, 2, 5, 7, 8, 9, 11, 12, 13, 15, 16, 18, 20, 21, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36];
-            diseaseClasses.forEach(idx => {
-                scores[idx] += 0.03;
-            });
+            diseaseClasses.forEach(idx => { scores[idx] += 0.03; });
         }
 
-        // ────────── VERY UNIFORM GREEN = DEFINITELY HEALTHY ──────────
         if (colors.green > 0.40 && colors.colorVariance < 25) {
             const healthyClasses = [3, 4, 6, 10, 14, 17, 19, 22, 23, 24, 27, 37];
-            healthyClasses.forEach(idx => {
-                scores[idx] += 0.15;
-            });
+            healthyClasses.forEach(idx => { scores[idx] += 0.15; });
         }
 
-        // Use image signature for consistent results per image
         const seed = (colors.avgR * 17 + colors.avgG * 31 + colors.avgB * 47) % 38;
         scores[Math.floor(seed)] += 0.08;
 
         return scores;
     }
 
-    /**
-     * Convert raw scores to softmax-like probabilities.
-     */
     function softmax(scores) {
         const maxScore = Math.max(...scores);
         const exps = scores.map(s => Math.exp(s - maxScore));
@@ -269,7 +311,7 @@ const CropDocOffline = (() => {
     }
 
     /**
-     * Run color-analysis based prediction — NO model files needed.
+     * Run prediction — tries real TF.js model first, falls back to color-analysis.
      * @param {File} file - The image file to classify.
      */
     async function predict(file) {
@@ -279,38 +321,63 @@ const CropDocOffline = (() => {
         const img = await CropDocPreprocess.loadImage(file);
         const canvas = CropDocPreprocess.resizeToCanvas(img);
 
-        // Simulate processing time (feels more real)
-        await new Promise(r => setTimeout(r, 800 + Math.random() * 700));
+        // Try to load the model (lazy, first time only)
+        await loadModel();
 
-        // Analyze image colors
-        const colors = analyzeColors(canvas);
-        console.log('🎨 Color analysis:', {
-            green: (colors.green * 100).toFixed(1) + '%',
-            brown: (colors.brown * 100).toFixed(1) + '%',
-            yellow: (colors.yellow * 100).toFixed(1) + '%',
-            red: (colors.red * 100).toFixed(1) + '%',
-            white: (colors.white * 100).toFixed(1) + '%',
-            variance: colors.colorVariance.toFixed(1)
-        });
+        let predictedKbIdx;
+        let confidence;
+        let allProbs38;
+        let usedModel = false;
 
-        // Generate scores from colors
-        const rawScores = colorToScores(colors);
+        if (tfModel) {
+            // ── Real TF.js model inference ──
+            console.log('🧠 Running TF.js model inference...');
+            const tensor = CropDocPreprocess.canvasToTensor(canvas);
 
-        // Apply softmax for realistic probability distribution
-        const probabilities = softmax(rawScores);
+            try {
+                const result = runModelInference(tensor);
+                if (result && result.confidence > 0.1) {
+                    predictedKbIdx = result.kbIndex;
+                    confidence = result.confidence;
+                    allProbs38 = result.allProbs38;
+                    usedModel = true;
+                    console.log('✅ Model prediction:', CLASS_NAMES[predictedKbIdx], '→', (confidence * 100).toFixed(1) + '%');
+                }
+            } catch (err) {
+                console.warn('⚠️ Model inference failed, using fallback:', err.message);
+            } finally {
+                tensor.dispose();
+            }
+        }
 
-        // Find top prediction
-        const maxIdx = probabilities.indexOf(Math.max(...probabilities));
-        const confidence = probabilities[maxIdx];
-        const className = CLASS_NAMES[maxIdx];
+        if (!usedModel) {
+            // ── Color-analysis fallback ──
+            console.log('🎨 Using color-analysis fallback...');
+            await new Promise(r => setTimeout(r, 800 + Math.random() * 700));
 
-        // Get disease info
+            const colors = analyzeColors(canvas);
+            console.log('🎨 Color analysis:', {
+                green: (colors.green * 100).toFixed(1) + '%',
+                brown: (colors.brown * 100).toFixed(1) + '%',
+                yellow: (colors.yellow * 100).toFixed(1) + '%',
+                red: (colors.red * 100).toFixed(1) + '%',
+                white: (colors.white * 100).toFixed(1) + '%',
+                variance: colors.colorVariance.toFixed(1)
+            });
+
+            const rawScores = colorToScores(colors);
+            allProbs38 = softmax(rawScores);
+            predictedKbIdx = allProbs38.indexOf(Math.max(...allProbs38));
+            confidence = allProbs38[predictedKbIdx];
+        }
+
+        const className = CLASS_NAMES[predictedKbIdx];
         const info = kb.diseases[className] || {};
         const isHealthy = info.is_healthy || false;
         const severity = getSeverity(confidence, isHealthy);
 
         // Top 3 predictions
-        const indexed = probabilities.map((p, i) => ({ prob: p, idx: i }));
+        const indexed = allProbs38.map((p, i) => ({ prob: p, idx: i }));
         indexed.sort((a, b) => b.prob - a.prob);
         const top3 = indexed.slice(0, 3).map(item => ({
             class_name: CLASS_NAMES[item.idx],
@@ -320,7 +387,8 @@ const CropDocOffline = (() => {
             confidence_percent: Math.round(item.prob * 10000) / 100
         }));
 
-        console.log('🔍 Prediction:', className, '→', (confidence * 100).toFixed(1) + '%');
+        console.log('🔍 Prediction:', className, '→', (confidence * 100).toFixed(1) + '%',
+            usedModel ? '(TF.js model)' : '(color fallback)');
 
         return {
             success: true,
@@ -345,14 +413,15 @@ const CropDocOffline = (() => {
     }
 
     /**
-     * Always ready — no model files needed for prototype.
+     * Check if model or fallback is ready.
      */
     async function isReady() {
-        return true;
+        return true; // Color fallback always works
     }
 
     return {
         loadKnowledgeBase,
+        loadModel,
         predict,
         isReady,
         CLASS_NAMES

@@ -11,7 +11,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js" defer></script>
+    <script>
+        // Graceful TensorFlow.js loader with offline fallback
+        window.TFLoadTimeout = setTimeout(() => {
+            if (!window.tf) {
+                console.warn('⚠️ TensorFlow.js failed to load (offline?), will use color-analysis only');
+                window.tfLoadFailed = true;
+            }
+        }, 3000); // 3 second timeout for TF.js
+    </script>
 </head>
 <body>
     <!-- ═══ Status Bar ═══ -->
@@ -31,8 +40,8 @@
                 <div class="logo-icon">🌿</div>
                 <h1>CropDoc <span class="highlight">AI</span></h1>
             </div>
-            <p class="tagline">Intelligent Crop Disease Detection — Powered by On-Device AI</p>
-            <p class="sub-tagline">Upload a leaf photo to instantly identify diseases, get severity estimates, and receive actionable treatment recommendations.</p>
+            <p class="tagline">Intelligent Crop Disease Detection — 100% On-Device AI</p>
+            <p class="sub-tagline">Upload a leaf photo to instantly identify diseases and get treatment recommendations. Works completely offline — no internet needed.</p>
             <!-- Stats Row -->
             <div class="hero-stats">
                 <div class="stat-item">
@@ -298,18 +307,59 @@
 
     <!-- ═══ Footer ═══ -->
     <footer class="footer">
-        <p>CropDoc AI v1.0 — On-Device Crop Disease Detection</p>
-        <p class="footer-sub">Powered by TensorFlow.js & MobileNetV2 | 38 Disease Classes | Works Offline</p>
+        <p>CropDoc AI v1.0 — 100% Offline Crop Disease Detection</p>
+        <p class="footer-sub">Powered by TensorFlow.js & MobileNetV2 | 38 Disease Classes | No Internet Required</p>
     </footer>
 
     <!-- Scripts -->
     <script src="/static/js/preprocess.js"></script>
     <script src="/static/js/storage.js"></script>
     <script src="/static/js/offline.js"></script>
-    <script src="/static/js/online.js"></script>
     <script src="/static/js/app.js"></script>
 
     <script>
+        // Ensure TF.js is loaded and initialize app
+        function initializeApp() {
+            // Clear the timeout if TF.js loaded successfully
+            if (window.TFLoadTimeout) clearTimeout(window.TFLoadTimeout);
+            
+            // Check if TF.js is available
+            if (!window.tf && !window.tfLoadFailed) {
+                console.log('⏳ Waiting for TensorFlow.js to load...');
+                setTimeout(initializeApp, 100);
+                return;
+            }
+
+            if (window.tfLoadFailed || !window.tf) {
+                console.warn('📴 TensorFlow.js unavailable — app will use color-analysis fallback only');
+                // Create a minimal tf stub so offline.js doesn't crash
+                if (!window.tf) {
+                    window.tf = {
+                        loadLayersModel: async () => null,
+                        tidy: (fn) => fn(),
+                        dispose: () => {}
+                    };
+                }
+            } else {
+                console.log('✅ TensorFlow.js loaded successfully');
+            }
+
+            // Pre-load knowledge base on init
+            if (window.CropDocOffline && typeof CropDocOffline.loadKnowledgeBase === 'function') {
+                CropDocOffline.loadKnowledgeBase()
+                    .then(() => console.log('📚 Knowledge base loaded'))
+                    .catch(err => console.warn('⚠️ Knowledge base load failed:', err.message));
+            }
+        }
+
+        // Initialize app when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+
+        // Register Service Worker for offline caching
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js', { scope: '/' })

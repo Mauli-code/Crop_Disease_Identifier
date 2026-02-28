@@ -1,10 +1,11 @@
 /**
  * CropDoc AI — Image Preprocessing
  * Shared preprocessing utilities for both online and offline modes.
+ * Model expects 224×224 RGB input with MobileNetV2 preprocessing baked in.
  */
 
 const CropDocPreprocess = (() => {
-    const IMG_SIZE = 128;
+    const IMG_SIZE = 224;
 
     /**
      * Load an image file and return as HTMLImageElement.
@@ -49,15 +50,20 @@ const CropDocPreprocess = (() => {
     }
 
     /**
-     * Convert canvas to normalized TensorFlow.js tensor [1, 128, 128, 3].
-     * Pixel values normalized to [0, 1].
+     * Convert canvas to TensorFlow.js tensor [1, 224, 224, 3].
+     * No manual normalization — MobileNetV2 preprocess_input is baked into the model.
+     * The model expects raw pixel values [0, 255].
      */
     function canvasToTensor(canvas) {
+        if (typeof tf === 'undefined' || !tf.browser || !tf.browser.fromPixels) {
+            console.warn('⚠️ TensorFlow.js not available for tensor conversion');
+            return null;
+        }
+
         return tf.tidy(() => {
             const tensor = tf.browser.fromPixels(canvas)
                 .toFloat()
-                .div(tf.scalar(255.0))
-                .expandDims(0); // [1, 128, 128, 3]
+                .expandDims(0); // [1, 224, 224, 3]
             return tensor;
         });
     }
@@ -69,6 +75,9 @@ const CropDocPreprocess = (() => {
         const img = await loadImage(file);
         const canvas = resizeToCanvas(img);
         const tensor = canvasToTensor(canvas);
+        if (!tensor) {
+            throw new Error('Failed to convert canvas to tensor - TensorFlow.js may be unavailable');
+        }
         return { tensor, canvas, img };
     }
 

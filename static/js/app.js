@@ -85,27 +85,13 @@
     let currentFile = null;
     let currentResult = null;
     let cameraStream = null;
-    let isOnline = navigator.onLine;
 
     // ────────────────────────────────
-    // Connection Status
+    // Status (always on-device)
     // ────────────────────────────────
-    function updateConnectionStatus() {
-        isOnline = navigator.onLine;
-        if (isOnline) {
-            statusDot.className = 'status-dot online';
-            statusText.textContent = 'Online — Using server AI';
-            statusMode.textContent = 'ONLINE MODE';
-        } else {
-            statusDot.className = 'status-dot offline';
-            statusText.textContent = 'Offline — Using on-device AI';
-            statusMode.textContent = 'OFFLINE MODE';
-        }
-    }
-
-    window.addEventListener('online', updateConnectionStatus);
-    window.addEventListener('offline', updateConnectionStatus);
-    updateConnectionStatus();
+    statusDot.className = 'status-dot online';
+    statusText.textContent = 'On-Device AI — No internet needed';
+    statusMode.textContent = 'OFFLINE MODE';
 
     // ────────────────────────────────
     // Navigation Tabs
@@ -257,38 +243,17 @@
     });
 
     // ────────────────────────────────
-    // Analysis (Hybrid Logic)
+    // Analysis (On-Device Only)
     // ────────────────────────────────
     analyzeBtn.addEventListener('click', async () => {
         if (!currentFile) return;
 
         showSection('loading');
+        loadingText.textContent = 'Analyzing with on-device AI...';
+        modeLabel.textContent = 'on this device';
 
         try {
-            let result;
-
-            if (navigator.onLine) {
-                loadingText.textContent = 'Analyzing with server AI...';
-                modeLabel.textContent = 'on server';
-
-                try {
-                    result = await CropDocOnline.predict(currentFile);
-                } catch (onlineErr) {
-                    console.warn('Online prediction failed, falling back to offline:', onlineErr.message);
-                    loadingText.textContent = 'Server unavailable. Using on-device AI...';
-                    modeLabel.textContent = 'locally (fallback)';
-
-                    try {
-                        result = await CropDocOffline.predict(currentFile);
-                    } catch (offlineErr) {
-                        throw new Error('Both online and offline modes failed. ' + offlineErr.message);
-                    }
-                }
-            } else {
-                loadingText.textContent = 'Analyzing with on-device AI...';
-                modeLabel.textContent = 'locally';
-                result = await CropDocOffline.predict(currentFile);
-            }
+            const result = await CropDocOffline.predict(currentFile);
 
             currentResult = result;
             renderResults(result);
@@ -424,8 +389,7 @@
             });
         }
 
-        const modeInfo = data.mode === 'online' ? '🌐 Server AI' : '📱 On-Device AI';
-        statusMode.textContent = modeInfo;
+        statusMode.textContent = '📱 On-Device AI';
     }
 
     function updateSeverityDots(severity) {

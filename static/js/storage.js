@@ -8,6 +8,8 @@ const CropDocStorage = (() => {
     const DB_VERSION = 1;
     const STORE_REPORTS = 'reports';
     let db = null;
+    let dbAvailable = true;
+    let fallbackMemory = []; // In-memory fallback when IndexedDB unavailable
 
     /**
      * Open/create the IndexedDB database.
@@ -15,6 +17,10 @@ const CropDocStorage = (() => {
     function openDB() {
         return new Promise((resolve, reject) => {
             if (db) { resolve(db); return; }
+            if (!dbAvailable) { 
+                reject(new Error('IndexedDB unavailable - using memory fallback'));
+                return;
+            }
 
             const request = indexedDB.open(DB_NAME, DB_VERSION);
 
@@ -40,8 +46,13 @@ const CropDocStorage = (() => {
             };
 
             request.onerror = (event) => {
-                console.error('❌ IndexedDB error:', event.target.error);
+                console.warn('⚠️ IndexedDB error (using memory fallback):', event.target.error);
+                dbAvailable = false;
                 reject(event.target.error);
+            };
+
+            request.onblocked = () => {
+                console.warn('⚠️ IndexedDB blocked - upgrade needed');
             };
         });
     }

@@ -17,10 +17,22 @@ from PIL import Image
 # ──────────────────────────────────────────
 # Configuration
 # ──────────────────────────────────────────
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.h5")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.keras")
 KB_PATH = os.path.join(os.path.dirname(__file__), "knowledge_base.json")
-IMG_SIZE = (128, 128)
+IMG_SIZE = (224, 224)
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB max upload
+
+# The 8 classes the trained model outputs (in order)
+MODEL_CLASS_NAMES = [
+    "Pepper__bell___Bacterial_spot",
+    "Pepper__bell___healthy",
+    "Potato___Early_blight",
+    "Potato___Late_blight",
+    "Potato___healthy",
+    "Tomato_Early_blight",
+    "Tomato_Late_blight",
+    "Tomato_healthy"
+]
 
 # ──────────────────────────────────────────
 # Load Knowledge Base
@@ -84,11 +96,23 @@ app.add_middleware(
 # Image Preprocessing
 # ──────────────────────────────────────────
 def preprocess_image(image_bytes: bytes) -> np.ndarray:
-    """Resize and normalize image for model input."""
+    """Resize image for model input. No /255 normalization — preprocess_input is baked into the model."""
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     img = img.resize(IMG_SIZE, Image.LANCZOS)
-    arr = np.array(img, dtype=np.float32) / 255.0
-    return np.expand_dims(arr, axis=0)  # (1, 128, 128, 3)
+    arr = np.array(img, dtype=np.float32)
+    return np.expand_dims(arr, axis=0)  # (1, 224, 224, 3)
+
+# Map model's 8 output classes to 38-class knowledge base
+MODEL_TO_KB_MAP = {
+    0: "Pepper_bell___Bacterial_spot",
+    1: "Pepper_bell___healthy",
+    2: "Potato___Early_blight",
+    3: "Potato___Late_blight",
+    4: "Potato___healthy",
+    5: "Tomato___Early_blight",
+    6: "Tomato___Late_blight",
+    7: "Tomato___healthy"
+}
 
 def get_severity(confidence: float) -> str:
     """Estimate severity from model confidence."""
@@ -231,10 +255,22 @@ async def predict(file: UploadFile = File(...)):
 
     try:
         if current_model is not None:
-            # ── Real model prediction ──
+            # ── Real model prediction (8 classes) ──
             input_tensor = preprocess_image(image_bytes)
             predictions = current_model.predict(input_tensor, verbose=0)
-            probs = predictions[0]
+            model_probs = predictions[0]  # 8-class probabilities
+
+            # Map 8-class output to 38-class knowledge base
+            predicted_model_idx = int(np.argmax(model_probs))
+            kb_class_name = MODEL_TO_KB_MAP[predicted_model_idx]
+
+            # Build sparse 38-class probability array
+            probs = np.full(len(CLASS_NAMES), 0.0001)
+            for model_idx, kb_name in MODEL_TO_KB_MAP.items():
+                if kb_name in CLASS_NAMES:
+                    kb_idx = CLASS_NAMES.index(kb_name)
+                    probs[kb_idx] = float(model_probs[model_idx])
+
             mode = "online"
         else:
             # ── Prototype: color-analysis prediction ──
