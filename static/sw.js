@@ -13,6 +13,7 @@ const STATIC_ASSETS = [
     '/static/js/offline.js',
     '/static/js/online.js',
     '/static/js/preprocess.js',
+    '/static/js/storage.js',
     '/static/manifest.json',
     '/knowledge_base.json'
 ];
