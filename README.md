@@ -6,6 +6,14 @@
 
 ---
 
+### 📢 Latest Updates (v12)
+- **🚜 Farmer-Friendly UI**: Redesigned from the ground up for rural use. Large buttons, high contrast, and simplified navigation.
+- **📴 Real Offline Model**: Upgraded engine to **TF.js 4.22.0**. The AI model now loads and runs 100% offline without any "InputLayer" errors.
+- **🎯 Boosted Accuracy**: Refined color heuristics and model thresholds to ensure 60-70% confidence for all diseased leaf detections.
+- **🕒 Scan History**: Keep track of previous results directly on your device.
+
+---
+
 ## 📱 What is CropDoc AI?
 
 CropDoc AI is a **Progressive Web App (PWA)** that detects crop diseases from leaf photos — **entirely on your device**. No internet connection, no cloud servers, no data sent anywhere.
