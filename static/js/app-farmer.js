@@ -86,11 +86,11 @@ const FarmerApp = {
 
     updateOnlineStatus() {
         if (navigator.onLine) {
-            this.elements.onlineStatus.innerHTML = '<span class="status-dot"></span> Online Ready';
+            this.elements.onlineStatus.innerHTML = '<span class="status-dot"></span> Offline Ready';
             this.elements.onlineStatus.style.color = 'var(--primary)';
         } else {
-            this.elements.onlineStatus.innerHTML = '<span class="status-dot" style="background:#FFA000"></span> Working Offline';
-            this.elements.onlineStatus.style.color = '#E65100';
+            this.elements.onlineStatus.innerHTML = '<span class="status-dot" style="background:#2E7D32"></span> Offline Mode';
+            this.elements.onlineStatus.style.color = 'var(--primary)';
         }
     },
 

@@ -6,7 +6,7 @@
  * - Graceful offline fallbacks
  */
 
-const CACHE_NAME = 'cropdoc-v11';
+const CACHE_NAME = 'cropdoc-v12';
 const FONT_CACHE = 'cropdoc-fonts-v1';
 const MODEL_CACHE = 'cropdoc-models-v1';
 
