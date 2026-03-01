@@ -186,19 +186,20 @@ const CropDocOffline = (() => {
             const sat = max === 0 ? 0 : (max - min) / max;
             const brightness = (r + g + b) / 3;
 
-            if (brightness < 40) {
+            // Broadened thresholds for farm photos
+            if (brightness < 60) {
                 dark++;
-            } else if (brightness > 220 && sat < 0.15) {
+            } else if (brightness > 200 && sat < 0.2) {
                 white++;
-            } else if (g > r * 1.2 && g > b * 1.2 && sat > 0.15) {
+            } else if (g > r * 1.05 && g > b * 1.05 && sat > 0.1) {
                 green++;
-            } else if (r > 140 && g > 120 && b < 80 && r > b * 1.5) {
+            } else if (r > 130 && g > 110 && b < 100 && r > b * 1.3) {
                 yellow++;
-            } else if (r > 120 && g < 90 && b < 90 && sat > 0.2) {
+            } else if (r > 100 && g < 100 && b < 100 && r > g * 1.3) {
                 red++;
-            } else if (r > 100 && g > 60 && g < 120 && b < 80 && r > g) {
+            } else if (r > 80 && g > 50 && g < 130 && b < 100 && r > g) {
                 brown++;
-            } else if (r > 150 && g > 80 && g < 140 && b < 80) {
+            } else if (r > 140 && g > 70 && g < 150 && b < 90) {
                 orange++;
             }
         }
@@ -227,67 +228,67 @@ const CropDocOffline = (() => {
     }
 
     function colorToScores(colors) {
-        const scores = new Array(38).fill(0.001);
+        const numClasses = CLASS_NAMES.length;
+        const scores = new Array(numClasses).fill(0.1);
 
-        if (colors.green > 0.35) {
-            scores[3] += 0.20; scores[4] += 0.10; scores[6] += 0.12;
-            scores[10] += 0.15; scores[14] += 0.12; scores[17] += 0.12;
-            scores[19] += 0.15; scores[22] += 0.14; scores[23] += 0.08;
-            scores[24] += 0.08; scores[27] += 0.12; scores[37] += 0.18;
+        // Correct Healthy Indices based on CLASS_NAMES array in this file:
+        // Apple(3), Blueberry(4), Cherry(6), Corn(10), Grape(14), Peach(17), Pepper(19), Potato(22), Raspberry(23), Soybean(24), Strawberry(27), Tomato(37)
+        const kbHealthy = [3, 4, 6, 10, 14, 17, 19, 22, 23, 24, 27, 37];
 
-            if (colors.green > 0.50) {
-                const healthyPick = [3, 10, 14, 19, 22, 37][Math.floor(colors.avgG % 6)];
-                scores[healthyPick] += 0.40;
-            }
+        // 🟢 GREEN LUSH (Initial Healthy Score)
+        if (colors.green > 0.15) {
+            kbHealthy.forEach(idx => {
+                scores[idx] += colors.green * 15;
+            });
         }
 
-        if (colors.brown > 0.08) {
-            scores[0] += colors.brown * 2.5; scores[1] += colors.brown * 3.0;
-            scores[11] += colors.brown * 2.8; scores[20] += colors.brown * 3.5;
-            scores[21] += colors.brown * 3.2; scores[29] += colors.brown * 3.8;
-            scores[30] += colors.brown * 3.5; scores[34] += colors.brown * 2.5;
-            scores[32] += colors.brown * 2.2;
+        // 🚨 HEALTHY PENALTY (Critical Fix)
+        // If brown, yellow, or white exists, CRUSH the healthy scores.
+        const diseaseLevel = colors.brown + (colors.yellow * 1.2) + (colors.white * 1.5) + (colors.red * 1.2);
+        if (diseaseLevel > 0.04) {
+            const penalty = 50 + (diseaseLevel * 100); // Massive penalty
+            kbHealthy.forEach(idx => {
+                scores[idx] -= penalty;
+            });
         }
 
-        if (colors.yellow > 0.10) {
-            scores[2] += colors.yellow * 2.5; scores[15] += colors.yellow * 3.0;
-            scores[35] += colors.yellow * 4.0; scores[36] += colors.yellow * 3.2;
-            scores[8] += colors.yellow * 2.0;
+        // 🟤 BROWN SPOTS (Blights/Rust/Scab)
+        if (colors.brown > 0.02) {
+            scores[20] += colors.brown * 60; // Potato Early Blight
+            scores[21] += colors.brown * 60; // Potato Late Blight
+            scores[29] += colors.brown * 60; // Tomato Early Blight
+            scores[30] += colors.brown * 60; // Tomato Late Blight
+            scores[0] += colors.brown * 60;  // Apple Scab
+            scores[8] += colors.brown * 50;  // Corn Rust
         }
 
-        if (colors.red > 0.08) {
-            scores[2] += colors.red * 3.0; scores[8] += colors.red * 4.0;
-            scores[26] += colors.red * 2.5; scores[16] += colors.red * 2.0;
+        // 🟡 YELLOWING (Chlorosis/Virus/Bacterial)
+        if (colors.yellow > 0.03) {
+            scores[35] += colors.yellow * 70; // Tomato Yellow Curl Virus
+            scores[32] += colors.yellow * 60; // Tomato Septoria
+            scores[15] += colors.yellow * 50; // Orange Greening
+            scores[1] += colors.yellow * 40;  // Apple Black Rot
+            scores[16] += colors.yellow * 40; // Peach Bacterial Spot
         }
 
-        if (colors.white > 0.12) {
-            scores[5] += colors.white * 3.5; scores[25] += colors.white * 4.0;
-            scores[31] += colors.white * 2.5;
+        // ⚪ WHITE COATING (Mildew / Gray Spot)
+        if (colors.white > 0.03) {
+            scores[5] += colors.white * 100; // Cherry Powdery Mildew
+            scores[25] += colors.white * 100; // Squash Powdery Mildew
+            scores[31] += colors.white * 60;  // Tomato Leaf Mold
+            scores[13] += colors.white * 40;  // Grape Leaf Blight
         }
 
-        if (colors.dark > 0.15 && colors.green > 0.15) {
-            scores[7] += 0.15; scores[9] += 0.12; scores[12] += 0.10;
-            scores[13] += 0.12; scores[28] += 0.18; scores[18] += 0.15;
-            scores[33] += 0.12;
+        // 🔴 ORANGE/RED (Cedar Rust)
+        if (colors.red > 0.03 || colors.orange > 0.03) {
+            scores[2] += colors.red * 80;  // Apple Cedar Rust
+            scores[8] += colors.red * 60;  // Corn Rust
         }
 
-        if (colors.orange > 0.08) {
-            scores[2] += colors.orange * 3.0; scores[8] += colors.orange * 3.5;
-            scores[15] += colors.orange * 2.5; scores[9] += colors.orange * 2.0;
+        // Ensure no negative scores before softmax
+        for (let i = 0; i < scores.length; i++) {
+            if (scores[i] < 0.001) scores[i] = 0.001;
         }
-
-        if (colors.colorVariance > 40 && colors.green < 0.35) {
-            const diseaseClasses = [0, 1, 2, 5, 7, 8, 9, 11, 12, 13, 15, 16, 18, 20, 21, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36];
-            diseaseClasses.forEach(idx => { scores[idx] += 0.03; });
-        }
-
-        if (colors.green > 0.40 && colors.colorVariance < 25) {
-            const healthyClasses = [3, 4, 6, 10, 14, 17, 19, 22, 23, 24, 27, 37];
-            healthyClasses.forEach(idx => { scores[idx] += 0.15; });
-        }
-
-        const seed = (colors.avgR * 17 + colors.avgG * 31 + colors.avgB * 47) % 38;
-        scores[Math.floor(seed)] += 0.08;
 
         return scores;
     }
@@ -356,19 +357,28 @@ const CropDocOffline = (() => {
             await new Promise(r => setTimeout(r, 800 + Math.random() * 700));
 
             const colors = analyzeColors(canvas);
-            console.log('🎨 Color analysis:', {
-                green: (colors.green * 100).toFixed(1) + '%',
-                brown: (colors.brown * 100).toFixed(1) + '%',
-                yellow: (colors.yellow * 100).toFixed(1) + '%',
-                red: (colors.red * 100).toFixed(1) + '%',
-                white: (colors.white * 100).toFixed(1) + '%',
-                variance: colors.colorVariance.toFixed(1)
-            });
-
             const rawScores = colorToScores(colors);
             allProbs38 = softmax(rawScores);
             predictedKbIdx = allProbs38.indexOf(Math.max(...allProbs38));
+            if (predictedKbIdx === -1) predictedKbIdx = 0; // Safety fallback
             confidence = allProbs38[predictedKbIdx];
+
+            // 🚀 CONFIDENCE BOOSTER (Requested: 60-70%)
+            // If fallback confidence is low, boost it to a realistic farmer-friendly range.
+            const targetMin = 0.62;
+            const targetMax = 0.74;
+            const boostedConf = targetMin + (Math.random() * (targetMax - targetMin));
+
+            if (confidence < targetMin) {
+                const diff = boostedConf - confidence;
+                const ratio = (1 - boostedConf) / (1 - confidence);
+
+                allProbs38 = allProbs38.map((p, i) => {
+                    if (i === predictedKbIdx) return boostedConf;
+                    return p * ratio;
+                });
+                confidence = boostedConf;
+            }
         }
 
         const className = CLASS_NAMES[predictedKbIdx];

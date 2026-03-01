@@ -6,7 +6,7 @@
  * - Graceful offline fallbacks
  */
 
-const CACHE_NAME = 'cropdoc-v3';
+const CACHE_NAME = 'cropdoc-v10';
 const FONT_CACHE = 'cropdoc-fonts-v1';
 const MODEL_CACHE = 'cropdoc-models-v1';
 
@@ -169,8 +169,8 @@ async function cacheFirst(request, cacheName) {
         if (request.headers.get('Accept')?.includes('text/html')) {
             console.warn(`[SW] Returning app shell for ${request.url}`);
             try {
-                return await caches.match('/static/index.html') || 
-                       await caches.match('/');
+                return await caches.match('/static/index.html') ||
+                    await caches.match('/');
             } catch (e) {
                 console.error('[SW] Could not serve app shell:', e);
             }
@@ -206,9 +206,9 @@ async function networkFirst(request) {
         // 3. No cache, return offline response
         console.error(`[SW] ❌ Offline and no cache for ${request.url}`);
         if (request.url.includes('/api/')) {
-            return new Response(JSON.stringify({ 
+            return new Response(JSON.stringify({
                 error: 'Offline - API unavailable',
-                fallback: true 
+                fallback: true
             }), {
                 status: 503,
                 statusText: 'Service Unavailable',

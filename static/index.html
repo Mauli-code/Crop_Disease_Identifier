@@ -1,372 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CropDoc AI - Intelligent crop disease detection from leaf images using AI. Works offline.">
-    <meta name="theme-color" content="#0a1a0f">
-    <title>CropDoc AI — Crop Disease Identifier</title>
-    <link rel="manifest" href="/static/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=0">
+    <meta name="description" content="CropDoc — Simple, clean crop disease detection for farmers.">
+    <meta name="theme-color" content="#2E7D32">
+    <title>CropDoc — Farmer Friendly Checker</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js" defer></script>
-    <script>
-        // Graceful TensorFlow.js loader with offline fallback
-        window.TFLoadTimeout = setTimeout(() => {
-            if (!window.tf) {
-                console.warn('⚠️ TensorFlow.js failed to load (offline?), will use color-analysis only');
-                window.tfLoadFailed = true;
-            }
-        }, 3000); // 3 second timeout for TF.js
-    </script>
-</head>
-<body>
-    <!-- ═══ Status Bar ═══ -->
-    <div class="status-bar">
-        <div class="status-indicator" id="statusIndicator">
-            <span class="status-dot"></span>
-            <span class="status-text" id="statusText">Checking connection...</span>
-        </div>
-        <div class="status-mode" id="statusMode">—</div>
-    </div>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=5">
+    <link rel="manifest" href="/static/manifest.json">
 
-    <!-- ═══ Hero Section ═══ -->
-    <header class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-content">
-            <div class="logo">
-                <div class="logo-icon">🌿</div>
-                <h1>CropDoc <span class="highlight">AI</span></h1>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js" defer></script>
+</head>
+
+<body>
+
+    <!-- ═══ HEADER (Sticky) ═══ -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="header-left">
+                <img src="/static/logo.png" alt="CropDoc Logo" class="header-logo">
+                <h1 class="header-title">CropDoc</h1>
             </div>
-            <p class="tagline">Intelligent Crop Disease Detection — 100% On-Device AI</p>
-            <p class="sub-tagline">Upload a leaf photo to instantly identify diseases and get treatment recommendations. Works completely offline — no internet needed.</p>
-            <!-- Stats Row -->
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-value">38</span>
-                    <span class="stat-label">Diseases</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-value">14</span>
-                    <span class="stat-label">Crops</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-value" id="scanCountStat">0</span>
-                    <span class="stat-label">Scans</span>
-                </div>
+            <div class="header-right">
+                <span class="online-status" id="onlineStatus">
+                    <span class="status-dot"></span> Offline Ready
+                </span>
             </div>
         </div>
     </header>
 
-    <!-- ═══ Navigation Tabs ═══ -->
-    <nav class="nav-tabs">
-        <button class="nav-tab active" data-tab="scan" id="navScan">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-            Scan
-        </button>
-        <button class="nav-tab" data-tab="history" id="navHistory">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            History
-            <span class="nav-badge hidden" id="historyBadge">0</span>
-        </button>
-    </nav>
-
-    <!-- ═══ Main App ═══ -->
-    <main class="app-container">
-
-        <!-- ═══════════ SCAN TAB ═══════════ -->
-        <div class="tab-page active" id="scanPage">
-
-            <!-- Upload Section -->
-            <section class="upload-section" id="uploadSection">
-                <div class="upload-zone" id="uploadZone">
-                    <div class="upload-icon">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17 8 12 3 7 8"/>
-                            <line x1="12" y1="3" x2="12" y2="15"/>
-                        </svg>
-                    </div>
-                    <h2>Upload Leaf Image</h2>
-                    <p>Drag & drop an image here, or click to browse</p>
-                    <p class="upload-hint">Supports JPEG, PNG, WebP — Max 5MB</p>
-                    <input type="file" id="fileInput" accept="image/*" hidden>
-                </div>
-
-                <div class="action-row">
-                    <button class="btn btn-primary" id="uploadBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <polyline points="21 15 16 10 5 21"/>
-                        </svg>
-                        Choose Image
-                    </button>
-                    <button class="btn btn-secondary" id="cameraBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                            <circle cx="12" cy="13" r="4"/>
-                        </svg>
-                        Take Photo
-                    </button>
-                </div>
-            </section>
-
-            <!-- Preview Section (hidden initially) -->
-            <section class="preview-section hidden" id="previewSection">
-                <div class="preview-card">
-                    <div class="preview-image-container">
-                        <img id="previewImage" alt="Uploaded leaf image preview">
-                    </div>
-                    <div class="preview-actions">
-                        <button class="btn btn-primary btn-analyze" id="analyzeBtn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                            </svg>
-                            Analyze Disease
-                        </button>
-                        <button class="btn btn-ghost" id="clearBtn">Clear & Upload New</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Loading State -->
-            <section class="loading-section hidden" id="loadingSection">
-                <div class="loader">
-                    <div class="loader-ring"></div>
-                    <div class="loader-leaf">🌿</div>
-                </div>
-                <p class="loading-text" id="loadingText">Analyzing leaf image...</p>
-                <p class="loading-sub">Running AI inference <span id="modeLabel">locally</span></p>
-            </section>
-
-            <!-- Results Section (hidden initially) -->
-            <section class="results-section hidden" id="resultsSection">
-                <!-- Save confirmation -->
-                <div class="save-toast hidden" id="saveToast">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Report saved to history</span>
-                </div>
-
-                <!-- Diagnosis Header -->
-                <div class="result-header" id="resultHeader">
-                    <div class="result-status" id="resultStatus">
-                        <span class="result-emoji" id="resultEmoji">🔬</span>
-                        <div>
-                            <h2 id="resultDisease">—</h2>
-                            <p class="result-crop" id="resultCrop">—</p>
-                        </div>
-                    </div>
-                    <div class="result-badge" id="resultBadge">
-                        <span id="resultRiskLevel">—</span>
-                    </div>
-                </div>
-
-                <!-- Confidence & Severity -->
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-label">Confidence</div>
-                        <div class="metric-value" id="resultConfidence">—</div>
-                        <div class="metric-bar">
-                            <div class="metric-bar-fill" id="confidenceBar"></div>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">Severity</div>
-                        <div class="metric-value" id="resultSeverity">—</div>
-                        <div class="severity-dots" id="severityDots">
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scientific Info -->
-                <div class="info-card" id="scientificCard">
-                    <h3>🔬 Scientific Information</h3>
-                    <p id="resultScientific">—</p>
-                </div>
-
-                <!-- Symptoms -->
-                <div class="info-card">
-                    <h3>🩺 Symptoms</h3>
-                    <p id="resultSymptoms">—</p>
-                </div>
-
-                <!-- Treatment -->
-                <div class="info-card treatment-card">
-                    <h3>💊 Treatment</h3>
-                    <div class="treatment-tabs">
-                        <button class="tab active" data-tab="organic" id="tabOrganic">🌱 Organic</button>
-                        <button class="tab" data-tab="chemical" id="tabChemical">🧪 Chemical</button>
-                    </div>
-                    <div class="tab-content active" id="treatmentOrganic">—</div>
-                    <div class="tab-content" id="treatmentChemical">—</div>
-                </div>
-
-                <!-- Prevention -->
-                <div class="info-card">
-                    <h3>🛡️ Prevention</h3>
-                    <p id="resultPrevention">—</p>
-                </div>
-
-                <!-- Fertilizer -->
-                <div class="info-card">
-                    <h3>🌾 Fertilizer Recommendation</h3>
-                    <p id="resultFertilizer">—</p>
-                </div>
-
-                <!-- Top Predictions -->
-                <div class="info-card" id="topPredictionsCard">
-                    <h3>📊 Alternative Diagnoses</h3>
-                    <div id="topPredictions" class="top-predictions"></div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="result-actions">
-                    <button class="btn btn-primary btn-full" id="newAnalysisBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="1 4 1 10 7 10"/>
-                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-                        </svg>
-                        New Analysis
-                    </button>
-                    <button class="btn btn-secondary" id="shareBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                        </svg>
-                        Share
-                    </button>
-                </div>
-            </section>
+    <!-- ═══ TAGLINE ═══ -->
+    <div class="tagline-bar">
+        <div class="container">
+            <p>Take photo → Detect disease → Get treatment</p>
         </div>
+    </div>
 
-        <!-- ═══════════ HISTORY TAB ═══════════ -->
-        <div class="tab-page" id="historyPage">
-            <section class="history-section">
-                <div class="history-header">
-                    <h2>📋 Scan History</h2>
-                    <p class="history-sub">Your past diagnoses — stored locally on this device</p>
+    <!-- ═══ MAIN APP ═══ -->
+    <main class="app-container">
+        <div class="container">
+
+            <!-- Error Banner -->
+            <div class="error-banner" id="errorBanner" role="alert"></div>
+
+            <!-- Upload Card -->
+            <section class="card upload-card" id="uploadCard">
+                <h2 class="card-title">🌿 Check Your Crop</h2>
+                <p class="card-subtitle">Choose a photo of a sick leaf to see what's wrong.</p>
+
+                <div class="upload-zone" id="uploadZone" role="button" tabindex="0">
+                    <div class="zone-illustration">📸</div>
+                    <p class="zone-text">Tap to select photo</p>
+                    <p class="zone-subtext">JPEG or PNG, max 10MB</p>
                 </div>
+                <input type="file" id="fileInput" accept="image/*" class="hidden">
 
-                <!-- Empty State -->
-                <div class="history-empty" id="historyEmpty">
-                    <div class="empty-icon">📭</div>
-                    <h3>No scans yet</h3>
-                    <p>Upload a leaf image to get started. All results are automatically saved here.</p>
-                    <button class="btn btn-primary" id="goToScanBtn">Start First Scan</button>
-                </div>
-
-                <!-- History List -->
-                <div class="history-list hidden" id="historyList"></div>
-
-                <!-- Clear History -->
-                <button class="btn btn-ghost btn-clear-history hidden" id="clearHistoryBtn">
-                    🗑️ Clear All History
+                <button class="btn btn-primary" id="uploadBtn">
+                    🖼️ Upload Leaf Photo
                 </button>
             </section>
-        </div>
 
-        <!-- ═══ Camera Modal ═══ -->
-        <div class="modal hidden" id="cameraModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>📷 Camera Capture</h3>
-                    <button class="modal-close" id="closeCameraModal">✕</button>
+            <!-- Preview Card -->
+            <section class="card preview-card hidden" id="previewCard">
+                <h2 class="card-title">📸 Leaf Preview</h2>
+                <div class="preview-frame">
+                    <img id="previewImage" src="" alt="Selected leaf preview">
                 </div>
-                <video id="cameraVideo" autoplay playsinline></video>
-                <canvas id="cameraCanvas" hidden></canvas>
-                <button class="btn btn-primary btn-full" id="captureBtn">Capture Photo</button>
-            </div>
-        </div>
 
-        <!-- ═══ History Detail Modal ═══ -->
-        <div class="modal hidden" id="historyDetailModal">
-            <div class="modal-content modal-detail">
-                <div class="modal-header">
-                    <h3 id="detailTitle">Report Details</h3>
-                    <button class="modal-close" id="closeDetailModal">✕</button>
+                <div class="preview-actions">
+                    <button class="btn btn-primary" id="analyzeBtn">
+                        🔍 Check Disease
+                    </button>
+                    <button class="btn btn-outline" id="clearBtn">
+                        ↩️ Change Photo
+                    </button>
                 </div>
-                <div class="modal-body" id="detailBody"></div>
-            </div>
-        </div>
+            </section>
 
+            <!-- Loading View -->
+            <section class="loading-view hidden" id="loadingSection">
+                <div class="loading-spinner">🌿</div>
+                <p>Checking disease...</p>
+                <small>Analyzing leaf patterns</small>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-view hidden" id="resultSection">
+                <div class="card result-card">
+                    <div class="result-header">
+                        <div class="result-icon-box" id="resultEmoji">🌿</div>
+                        <div class="result-meta">
+                            <h2 id="resultDisease" class="disease-name">Disease Name</h2>
+                            <p id="resultCrop" class="crop-name">Crop Type</p>
+                        </div>
+                    </div>
+
+                    <div class="confidence-box">
+                        <div class="confidence-label">
+                            Confidence: <span id="resultConfidence">0%</span>
+                        </div>
+                        <div class="confidence-track">
+                            <div class="confidence-fill" id="confidenceBar"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-details">
+                        <div class="detail-block">
+                            <h3>💊 Treatment Steps</h3>
+                            <ul id="resultTreatment" class="treatment-list"></ul>
+                        </div>
+                        <div class="detail-block">
+                            <h3>🛡️ Prevention</h3>
+                            <p id="resultPrevention">Loading...</p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="newScanBtn">
+                        🔄 Check Another Leaf
+                    </button>
+                </div>
+            </section>
+
+            <!-- HISTORY SECTION -->
+            <section class="history-section" id="historySection">
+                <div class="section-header">
+                    <h2 class="section-title">🕒 Previous Reports</h2>
+                    <button class="btn-text" id="clearHistoryBtn">Clear All</button>
+                </div>
+
+                <div class="history-list" id="historyList">
+                    <!-- History cards will be injected here -->
+                    <div class="empty-history" id="emptyHistory">
+                        <p>No reports yet. Your checks will show up here.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
     </main>
 
-    <!-- ═══ Footer ═══ -->
-    <footer class="footer">
-        <p>CropDoc AI v1.0 — 100% Offline Crop Disease Detection</p>
-        <p class="footer-sub">Powered by TensorFlow.js & MobileNetV2 | 38 Disease Classes | No Internet Required</p>
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="site-footer">
+        <div class="container">
+            <p class="footer-copy">&copy; 2026 CropDoc</p>
+            <p class="footer-badge">Made for Farmers</p>
+            <p class="footer-contact">support@cropdoc.com</p>
+        </div>
     </footer>
 
     <!-- Scripts -->
     <script src="/static/js/preprocess.js"></script>
     <script src="/static/js/storage.js"></script>
-    <script src="/static/js/offline.js"></script>
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/offline.js?v=10"></script>
+    <script src="/static/js/app-farmer.js?v=10"></script>
+    <script>
+        // Start Farmer App
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.FarmerApp) window.FarmerApp.init();
+        });
+    </script>
 
     <script>
-        // Ensure TF.js is loaded and initialize app
-        function initializeApp() {
-            // Clear the timeout if TF.js loaded successfully
-            if (window.TFLoadTimeout) clearTimeout(window.TFLoadTimeout);
-            
-            // Check if TF.js is available
-            if (!window.tf && !window.tfLoadFailed) {
-                console.log('⏳ Waiting for TensorFlow.js to load...');
-                setTimeout(initializeApp, 100);
-                return;
-            }
-
-            if (window.tfLoadFailed || !window.tf) {
-                console.warn('📴 TensorFlow.js unavailable — app will use color-analysis fallback only');
-                // Create a minimal tf stub so offline.js doesn't crash
-                if (!window.tf) {
-                    window.tf = {
-                        loadLayersModel: async () => null,
-                        tidy: (fn) => fn(),
-                        dispose: () => {}
-                    };
-                }
-            } else {
-                console.log('✅ TensorFlow.js loaded successfully');
-            }
-
-            // Pre-load knowledge base on init
-            if (window.CropDocOffline && typeof CropDocOffline.loadKnowledgeBase === 'function') {
-                CropDocOffline.loadKnowledgeBase()
-                    .then(() => console.log('📚 Knowledge base loaded'))
-                    .catch(err => console.warn('⚠️ Knowledge base load failed:', err.message));
-            }
-        }
-
-        // Initialize app when page loads
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
-        }
-
-        // Register Service Worker for offline caching
+        // Service worker registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
-                    .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
+                navigator.serviceWorker.register('/sw.js').catch(() => { });
             });
         }
     </script>
 </body>
+
 </html>
