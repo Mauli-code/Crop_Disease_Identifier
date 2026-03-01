@@ -8,6 +8,7 @@ const FarmerApp = {
     history: [],
 
     init() {
+        if (this.initialized) return;
         console.log('🌿 FarmerApp v3 Initializing...');
         this.cacheElements();
         this.bindEvents();
@@ -17,6 +18,8 @@ const FarmerApp = {
         // Listen for online/offline changes
         window.addEventListener('online', () => this.updateOnlineStatus());
         window.addEventListener('offline', () => this.updateOnlineStatus());
+
+        this.initialized = true;
     },
 
     cacheElements() {
@@ -253,8 +256,20 @@ const FarmerApp = {
 
     clearHistory() {
         if (confirm('Are you sure you want to clear your history?')) {
+            console.log('🛒 Clearing history...');
             this.history = [];
             localStorage.removeItem('cropdoc_history');
+
+            // Also try to clear IndexedDB if it exists (safety)
+            if (window.CropDocStorage && window.CropDocStorage.clearAll) {
+                window.CropDocStorage.clearAll().catch(() => { });
+            }
+
+            // Direct DOM clear as backup
+            if (this.elements.historyList) {
+                this.elements.historyList.innerHTML = '';
+            }
+
             this.renderHistory();
         }
     }
