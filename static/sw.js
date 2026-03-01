@@ -6,7 +6,7 @@
  * - Graceful offline fallbacks
  */
 
-const CACHE_NAME = 'cropdoc-v10';
+const CACHE_NAME = 'cropdoc-v11';
 const FONT_CACHE = 'cropdoc-fonts-v1';
 const MODEL_CACHE = 'cropdoc-models-v1';
 
@@ -20,7 +20,7 @@ const STATIC_ASSETS = [
     '/static/js/storage.js',
     '/static/manifest.json',
     '/knowledge_base.json',
-    'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js'
+    'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js'
 ];
 
 const FONT_ASSETS = [

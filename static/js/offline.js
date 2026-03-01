@@ -242,10 +242,11 @@ const CropDocOffline = (() => {
             });
         }
 
-        // 🚨 HEALTHY PENALTY (Critical Fix)
+        // 🚨 HEALTHY PENALTY (Critical Fix v11)
         // If brown, yellow, or white exists, CRUSH the healthy scores.
+        // v11: Lowered diseaseLevel threshold from 0.04 to 0.02 for better sensitivity.
         const diseaseLevel = colors.brown + (colors.yellow * 1.2) + (colors.white * 1.5) + (colors.red * 1.2);
-        if (diseaseLevel > 0.04) {
+        if (diseaseLevel > 0.02) {
             const penalty = 50 + (diseaseLevel * 100); // Massive penalty
             kbHealthy.forEach(idx => {
                 scores[idx] -= penalty;
@@ -272,9 +273,10 @@ const CropDocOffline = (() => {
         }
 
         // ⚪ WHITE COATING (Mildew / Gray Spot)
-        if (colors.white > 0.03) {
-            scores[5] += colors.white * 100; // Cherry Powdery Mildew
-            scores[25] += colors.white * 100; // Squash Powdery Mildew
+        // v11: Increased sensitivity from 0.03 to 0.02.
+        if (colors.white > 0.02) {
+            scores[5] += colors.white * 120; // Cherry Powdery Mildew (Boosted v11)
+            scores[25] += colors.white * 120; // Squash Powdery Mildew (Boosted v11)
             scores[31] += colors.white * 60;  // Tomato Leaf Mold
             scores[13] += colors.white * 40;  // Grape Leaf Blight
         }
@@ -289,6 +291,10 @@ const CropDocOffline = (() => {
         for (let i = 0; i < scores.length; i++) {
             if (scores[i] < 0.001) scores[i] = 0.001;
         }
+
+        // v11 Logging
+        const maxScoreIdx = scores.indexOf(Math.max(...scores));
+        console.log(`[Offline v11] Top heuristic class: ${CLASS_NAMES[maxScoreIdx]} (Score: ${scores[maxScoreIdx].toFixed(2)})`);
 
         return scores;
     }
